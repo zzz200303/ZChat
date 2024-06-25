@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option go_package = "./hello;hello";
+
+message HelloRequest{
+  string message = 1;
+}
+
+message HelloReply{
+  string message = 1;
+}
+
+service HelloService{
+  rpc PutStream(stream HelloRequest) returns (HelloReply);
+  rpc GetStream(HelloRequest) returns (stream HelloReply);
+  rpc AllStream(stream HelloRequest) returns (stream HelloReply);
+  rpc Echo(HelloRequest) returns (HelloReply);
+}
