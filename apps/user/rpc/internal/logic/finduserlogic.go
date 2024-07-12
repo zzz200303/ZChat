@@ -1,7 +1,9 @@
 package logic
 
 import (
+	"ZeZeIM/apps/user/models"
 	"context"
+	"github.com/jinzhu/copier"
 
 	"ZeZeIM/apps/user/rpc/internal/svc"
 	"ZeZeIM/apps/user/rpc/pb/user"
@@ -26,5 +28,30 @@ func NewFindUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FindUser
 func (l *FindUserLogic) FindUser(in *user.FindUserReq) (*user.FindUserResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &user.FindUserResp{}, nil
+	var (
+		userEntitys []*models.Users
+		err         error
+	)
+
+	if in.Phone != "" {
+		userEntitys, err = l.svcCtx.UsersModel.ListByPhone(l.ctx, in.Phone)
+	} else if in.Name != "" {
+		userEntitys, err = l.svcCtx.UsersModel.ListByName(l.ctx, in.Name)
+	} else if len(in.Ids) > 0 {
+		userEntitys, err = l.svcCtx.UsersModel.ListByIds(l.ctx, in.Ids)
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	var resp []*user.UserEntity
+	err = copier.Copy(&resp, &userEntitys)
+	if err != nil {
+		return nil, err
+	}
+
+	return &user.FindUserResp{
+		User: resp,
+	}, nil
 }
