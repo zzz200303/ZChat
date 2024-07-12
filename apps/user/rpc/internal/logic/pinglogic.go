@@ -2,10 +2,9 @@ package logic
 
 import (
 	"context"
-	"fmt"
 
 	"ZeZeIM/apps/user/rpc/internal/svc"
-	"ZeZeIM/apps/user/rpc/user"
+	"ZeZeIM/apps/user/rpc/pb/user"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -26,8 +25,6 @@ func NewPingLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PingLogic {
 
 func (l *PingLogic) Ping(in *user.Request) (*user.Response, error) {
 	// todo: add your logic here and delete this line
-	fmt.Println("User Ping通了")
-	return &user.Response{
-		Pong: "pong",
-	}, nil
+
+	return &user.Response{}, nil
 }

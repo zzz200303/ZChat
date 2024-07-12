@@ -1,7 +1,5 @@
 syntax = "proto3";
 
-package user;
-
 option go_package = "./user";
 
 // model

@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.4.0
 // - protoc             v5.27.1
-// source: apps/user/rpc/user.proto
+// source: user.proto
 
 package user
 
@@ -19,11 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion8
 
 const (
-	User_Ping_FullMethodName        = "/user.User/Ping"
-	User_Login_FullMethodName       = "/user.User/Login"
-	User_Register_FullMethodName    = "/user.User/Register"
-	User_GetUserInfo_FullMethodName = "/user.User/GetUserInfo"
-	User_FindUser_FullMethodName    = "/user.User/FindUser"
+	User_Ping_FullMethodName        = "/User/Ping"
+	User_Login_FullMethodName       = "/User/Login"
+	User_Register_FullMethodName    = "/User/Register"
+	User_GetUserInfo_FullMethodName = "/User/GetUserInfo"
+	User_FindUser_FullMethodName    = "/User/FindUser"
 )
 
 // UserClient is the client API for User service.
@@ -233,7 +233,7 @@ func _User_FindUser_Handler(srv interface{}, ctx context.Context, dec func(inter
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var User_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "user.User",
+	ServiceName: "User",
 	HandlerType: (*UserServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -258,5 +258,5 @@ var User_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "apps/user/rpc/user.proto",
+	Metadata: "user.proto",
 }

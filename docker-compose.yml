@@ -1,0 +1,38 @@
+version: '3'
+services:
+  user-rpc:
+    build:
+      context: .
+      dockerfile: apps/user/rpc/Dockerfile
+    image: user-rpc-image
+    ports:
+      - "10000:10000"
+    depends_on:
+      - mysql
+      - etcd
+      - redis
+
+  mysql:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: wpzyyds
+      MYSQL_DATABASE: zchat
+      MYSQL_USER: root
+      MYSQL_PASSWORD: wpzyyds
+    ports:
+      - "3306:3306"
+
+  redis:
+    image: redis:6.0
+    restart: always
+    ports:
+      - "6379:6379"
+
+  etcd:
+    image: quay.io/coreos/etcd:v3.5.1
+    environment:
+      ETCD_UNSUPPORTED_ARCH: amd64
+    ports:
+      - "2379:2379"
+      - "2380:2380"

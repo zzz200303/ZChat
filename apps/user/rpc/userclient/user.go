@@ -6,7 +6,7 @@ package userclient
 import (
 	"context"
 
-	"ZeZeIM/apps/user/rpc/user"
+	"ZeZeIM/apps/user/rpc/pb/user"
 
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"

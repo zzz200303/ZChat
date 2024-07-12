@@ -7,7 +7,7 @@ import (
 	"ZeZeIM/apps/user/rpc/internal/config"
 	"ZeZeIM/apps/user/rpc/internal/server"
 	"ZeZeIM/apps/user/rpc/internal/svc"
-	"ZeZeIM/apps/user/rpc/user"
+	"ZeZeIM/apps/user/rpc/pb/user"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"
@@ -16,7 +16,7 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-var configFile = flag.String("f", "apps/user/rpc/etc/user.yaml", "the config file")
+var configFile = flag.String("f", "etc/user.yaml", "the config file")
 
 func main() {
 	flag.Parse()

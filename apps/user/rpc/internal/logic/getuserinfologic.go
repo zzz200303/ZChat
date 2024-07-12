@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"ZeZeIM/apps/user/rpc/internal/svc"
-	"ZeZeIM/apps/user/rpc/user"
+	"ZeZeIM/apps/user/rpc/pb/user"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
