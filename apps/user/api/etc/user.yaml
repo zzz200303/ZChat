@@ -1,3 +1,13 @@
 Name: user
 Host: 0.0.0.0
-Port: 8888
+Port: 10001
+
+UserRpc:
+  Etcd:
+    Hosts:
+      - 192.168.0.111:12379
+    Key: user.rpc
+
+JwtAuth:
+  AccessSecret: wpzyyds
+  AccessExpire: 8640000

@@ -12,7 +12,21 @@ services:
       - etcd
       - redis
     networks:
-      zchat:
+      z-chat:
+
+  user-api:
+    build:
+      context: .
+      dockerfile: apps/user/api/Dockerfile
+    image: user-api-image
+    ports:
+      - "10001:10001"
+    depends_on:
+      - mysql
+      - etcd
+      - redis
+    networks:
+        z-chat:
 
   redis:
     image: redis:alpine3.18
@@ -26,7 +40,7 @@ services:
       TZ: Asia/Shanghai
     restart: always
     networks:
-      zchat:
+      z-chat:
 
   etcd:
     image: quay.io/coreos/etcd:v3.5.0
@@ -44,7 +58,7 @@ services:
       - ./components/etcd/data:/bitnami/etcd/data
       - ./components/etcd/logs:/bitnami/etcd/logs
     networks:
-      zchat:
+      z-chat:
 
   mysql:
     image: mysql:5.7
@@ -58,8 +72,8 @@ services:
       MYSQL_ROOT_PASSWORD: wpzyyds
     restart: always
     networks:
-      zchat:
+      z-chat:
 
 networks:
-  zchat:
+  z-chat:
     driver: bridge
