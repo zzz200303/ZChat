@@ -34,7 +34,7 @@ func (l *LoginLogic) Login(in *user.LoginReq) (*user.LoginResp, error) {
 	// 1. 验证用户是否注册，根据手机号码验证
 	userEntity, err := l.svcCtx.UsersModel.FindByPhone(l.ctx, in.Phone)
 	if err != nil {
-		if err == models.ErrNotFound {
+		if errors.Is(err, models.ErrNotFound) {
 			return nil, errors.WithStack(errors.New("用户未注册"))
 		}
 		return nil, errors.Wrapf(err, "find user by phone err %v , req %v", err, in.Phone)

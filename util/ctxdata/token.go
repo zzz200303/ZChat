@@ -2,13 +2,11 @@ package ctxdata
 
 import "github.com/golang-jwt/jwt"
 
-const Identify = "wpzyyds"
-
 func GetJwtToken(secretKey string, iat, seconds int64, uid string) (string, error) {
 	claims := make(jwt.MapClaims)
 	claims["exp"] = iat + seconds
 	claims["iat"] = iat
-	claims[Identify] = uid
+	claims["payload"] = uid
 
 	token := jwt.New(jwt.SigningMethodHS256)
 	token.Claims = claims

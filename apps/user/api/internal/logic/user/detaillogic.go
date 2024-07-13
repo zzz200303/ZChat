@@ -15,7 +15,7 @@ type DetailLogic struct {
 	svcCtx *svc.ServiceContext
 }
 
-// 获取用户信息
+// NewDetailLogic 获取用户信息
 func NewDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DetailLogic {
 	return &DetailLogic{
 		Logger: logx.WithContext(ctx),

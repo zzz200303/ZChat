@@ -15,7 +15,7 @@ type LoginLogic struct {
 	svcCtx *svc.ServiceContext
 }
 
-// 用户登入
+// NewLoginLogic 用户登入
 func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic {
 	return &LoginLogic{
 		Logger: logx.WithContext(ctx),
