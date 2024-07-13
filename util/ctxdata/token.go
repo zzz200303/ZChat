@@ -1,8 +1,3 @@
-/**
- * @author: dn-jinmin/dn-jinmin
- * @doc:
- */
-
 package ctxdata
 
 import "github.com/golang-jwt/jwt"
