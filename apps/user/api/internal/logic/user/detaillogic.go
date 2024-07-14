@@ -1,7 +1,10 @@
 package user
 
 import (
+	"ZeZeIM/apps/user/rpc/pb/user"
+	"ZeZeIM/util/ctxdata"
 	"context"
+	"github.com/jinzhu/copier"
 
 	"ZeZeIM/apps/user/api/internal/svc"
 	"ZeZeIM/apps/user/api/internal/types"
@@ -25,7 +28,20 @@ func NewDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DetailLogi
 }
 
 func (l *DetailLogic) Detail(req *types.UserInfoReq) (resp *types.UserInfoResp, err error) {
-	// todo: add your logic here and delete this line
+	uid := ctxdata.GetUId(l.ctx)
 
-	return
+	userInfoResp, err := l.svcCtx.User.GetUserInfo(l.ctx, &user.GetUserInfoReq{
+		Id: uid,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	var res types.User
+	err = copier.Copy(&res, userInfoResp.User)
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.UserInfoResp{Info: res}, nil
 }

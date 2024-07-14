@@ -1,16 +1,16 @@
-package handler
+package group
 
 import (
 	"net/http"
 
-	"ZeZeIM/apps/social/api/internal/logic"
+	"ZeZeIM/apps/social/api/internal/logic/group"
 	"ZeZeIM/apps/social/api/internal/svc"
 	"ZeZeIM/apps/social/api/internal/types"
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
 // 成员列表列表
-func groupUserListHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func GroupUserListHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req types.GroupUserListReq
 		if err := httpx.Parse(r, &req); err != nil {
@@ -18,7 +18,7 @@ func groupUserListHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		l := logic.NewGroupUserListLogic(r.Context(), svcCtx)
+		l := group.NewGroupUserListLogic(r.Context(), svcCtx)
 		resp, err := l.GroupUserList(&req)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)

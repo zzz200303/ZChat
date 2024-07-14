@@ -4,6 +4,8 @@ package handler
 import (
 	"net/http"
 
+	friend "ZeZeIM/apps/social/api/internal/handler/friend"
+	group "ZeZeIM/apps/social/api/internal/handler/group"
 	"ZeZeIM/apps/social/api/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
@@ -16,61 +18,68 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				// 好友申请
 				Method:  http.MethodPost,
 				Path:    "/friend/putIn",
-				Handler: friendPutInHandler(serverCtx),
+				Handler: friend.FriendPutInHandler(serverCtx),
 			},
 			{
 				// 好友申请处理
 				Method:  http.MethodPut,
 				Path:    "/friend/putIn",
-				Handler: friendPutInHandleHandler(serverCtx),
+				Handler: friend.FriendPutInHandleHandler(serverCtx),
 			},
 			{
 				// 好友申请列表
 				Method:  http.MethodGet,
 				Path:    "/friend/putIns",
-				Handler: friendPutInListHandler(serverCtx),
+				Handler: friend.FriendPutInListHandler(serverCtx),
 			},
 			{
 				// 好友列表
 				Method:  http.MethodGet,
 				Path:    "/friends",
-				Handler: friendListHandler(serverCtx),
+				Handler: friend.FriendListHandler(serverCtx),
 			},
+		},
+		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
+		rest.WithPrefix("/social"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
 			{
 				// 创群
 				Method:  http.MethodPost,
 				Path:    "/group",
-				Handler: createGroupHandler(serverCtx),
+				Handler: group.CreateGroupHandler(serverCtx),
 			},
 			{
 				// 申请进群
 				Method:  http.MethodPost,
 				Path:    "/group/putIn",
-				Handler: groupPutInHandler(serverCtx),
+				Handler: group.GroupPutInHandler(serverCtx),
 			},
 			{
 				// 申请进群处理
 				Method:  http.MethodPut,
 				Path:    "/group/putIn",
-				Handler: groupPutInHandleHandler(serverCtx),
+				Handler: group.GroupPutInHandleHandler(serverCtx),
 			},
 			{
 				// 申请进群列表
 				Method:  http.MethodGet,
 				Path:    "/group/putIns",
-				Handler: groupPutInListHandler(serverCtx),
+				Handler: group.GroupPutInListHandler(serverCtx),
 			},
 			{
 				// 成员列表列表
 				Method:  http.MethodGet,
 				Path:    "/group/users",
-				Handler: groupUserListHandler(serverCtx),
+				Handler: group.GroupUserListHandler(serverCtx),
 			},
 			{
 				// 用户申群列表
 				Method:  http.MethodGet,
 				Path:    "/groups",
-				Handler: groupListHandler(serverCtx),
+				Handler: group.GroupListHandler(serverCtx),
 			},
 		},
 		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),

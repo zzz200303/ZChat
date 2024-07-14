@@ -1,25 +1,25 @@
-package handler
+package group
 
 import (
 	"net/http"
 
-	"ZeZeIM/apps/social/api/internal/logic"
+	"ZeZeIM/apps/social/api/internal/logic/group"
 	"ZeZeIM/apps/social/api/internal/svc"
 	"ZeZeIM/apps/social/api/internal/types"
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-// 用户申群列表
-func groupListHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+// 申请进群
+func GroupPutInHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.GroupListReq
+		var req types.GroupPutInRep
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return
 		}
 
-		l := logic.NewGroupListLogic(r.Context(), svcCtx)
-		resp, err := l.GroupList(&req)
+		l := group.NewGroupPutInLogic(r.Context(), svcCtx)
+		resp, err := l.GroupPutIn(&req)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 		} else {

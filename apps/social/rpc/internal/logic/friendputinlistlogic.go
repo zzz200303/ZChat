@@ -1,10 +1,11 @@
 package logic
 
 import (
-	"context"
-
 	"ZeZeIM/apps/social/rpc/internal/svc"
 	"ZeZeIM/apps/social/rpc/pb/social"
+	"context"
+	"github.com/jinzhu/copier"
+	"github.com/pkg/errors"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -26,5 +27,19 @@ func NewFriendPutInListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *F
 func (l *FriendPutInListLogic) FriendPutInList(in *social.FriendPutInListReq) (*social.FriendPutInListResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &social.FriendPutInListResp{}, nil
+	friendReqList, err := l.svcCtx.FriendRequestsModel.ListNoHandler(l.ctx, in.UserId)
+	if err != nil {
+		return nil, errors.Wrapf(err, "find list friend req err %v req %v", err, in.UserId)
+	}
+
+	var resp []*social.FriendRequests
+	err = copier.Copy(&resp, &friendReqList)
+	if err != nil {
+		return nil, err
+	}
+
+	return &social.FriendPutInListResp{
+		List: resp,
+	}, nil
+
 }

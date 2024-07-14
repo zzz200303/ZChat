@@ -1,7 +1,10 @@
-package logic
+package group
 
 import (
+	"ZeZeIM/apps/social/rpc/socialclient"
+	"ZeZeIM/util/ctxdata"
 	"context"
+	"github.com/jinzhu/copier"
 
 	"ZeZeIM/apps/social/api/internal/svc"
 	"ZeZeIM/apps/social/api/internal/types"
@@ -24,8 +27,20 @@ func NewGroupListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GroupLi
 	}
 }
 
-func (l *GroupListLogic) GroupList(req *types.GroupListReq) (resp *types.GroupListResp, err error) {
+func (l *GroupListLogic) GroupList(req *types.GroupListRep) (resp *types.GroupListResp, err error) {
 	// todo: add your logic here and delete this line
 
-	return
+	uid := ctxdata.GetUId(l.ctx)
+	list, err := l.svcCtx.Social.GroupList(l.ctx, &socialclient.GroupListReq{
+		UserId: uid,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	var respList []*types.Groups
+	copier.Copy(&respList, list.List)
+
+	return &types.GroupListResp{List: respList}, nil
 }

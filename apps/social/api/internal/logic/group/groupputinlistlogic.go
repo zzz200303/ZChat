@@ -1,7 +1,9 @@
-package logic
+package group
 
 import (
+	"ZeZeIM/apps/social/rpc/socialclient"
 	"context"
+	"github.com/jinzhu/copier"
 
 	"ZeZeIM/apps/social/api/internal/svc"
 	"ZeZeIM/apps/social/api/internal/types"
@@ -24,8 +26,16 @@ func NewGroupPutInListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Gr
 	}
 }
 
-func (l *GroupPutInListLogic) GroupPutInList(req *types.GroupPutInListReq) (resp *types.GroupPutInListResp, err error) {
+func (l *GroupPutInListLogic) GroupPutInList(req *types.GroupPutInListRep) (resp *types.GroupPutInListResp, err error) {
+	// todo: add your logic here and delete this line
 	// todo: add your logic here and delete this line
 
-	return
+	list, err := l.svcCtx.Social.GroupPutinList(l.ctx, &socialclient.GroupPutinListReq{
+		GroupId: req.GroupId,
+	})
+
+	var respList []*types.GroupRequests
+	copier.Copy(&respList, list.List)
+
+	return &types.GroupPutInListResp{List: respList}, nil
 }

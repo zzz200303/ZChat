@@ -1,11 +1,10 @@
 package logic
 
 import (
-	"context"
-
 	"ZeZeIM/apps/social/rpc/internal/svc"
 	"ZeZeIM/apps/social/rpc/pb/social"
-
+	"context"
+	"github.com/jinzhu/copier"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -26,5 +25,15 @@ func NewFriendListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Friend
 func (l *FriendListLogic) FriendList(in *social.FriendListReq) (*social.FriendListResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &social.FriendListResp{}, nil
+	friendsList, err := l.svcCtx.FriendsModel.ListByUserid(l.ctx, in.UserId)
+	if err != nil {
+		return nil, err
+	}
+
+	var respList []*social.Friends
+	err = copier.Copy(&respList, &friendsList)
+
+	return &social.FriendListResp{
+		List: respList,
+	}, nil
 }

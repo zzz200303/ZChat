@@ -1,7 +1,10 @@
-package logic
+package friend
 
 import (
+	"ZeZeIM/apps/social/rpc/socialclient"
+	"ZeZeIM/util/ctxdata"
 	"context"
+	"github.com/jinzhu/copier"
 
 	"ZeZeIM/apps/social/api/internal/svc"
 	"ZeZeIM/apps/social/api/internal/types"
@@ -27,5 +30,15 @@ func NewFriendPutInListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *F
 func (l *FriendPutInListLogic) FriendPutInList(req *types.FriendPutInListReq) (resp *types.FriendPutInListResp, err error) {
 	// todo: add your logic here and delete this line
 
-	return
+	list, err := l.svcCtx.Social.FriendPutInList(l.ctx, &socialclient.FriendPutInListReq{
+		UserId: ctxdata.GetUId(l.ctx),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	var respList []*types.FriendRequests
+	copier.Copy(&respList, list.List)
+
+	return &types.FriendPutInListResp{List: respList}, nil
 }

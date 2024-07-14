@@ -28,6 +28,34 @@ services:
     networks:
         z-chat:
 
+  social-rpc:
+    build:
+      context: .
+      dockerfile: apps/social/rpc/Dockerfile
+    image: social-rpc-image
+    ports:
+      - "10002:10002"
+    depends_on:
+      - mysql
+      - etcd
+      - redis
+    networks:
+      z-chat:
+
+  social-api:
+    build:
+      context: .
+      dockerfile: apps/social/api/Dockerfile
+    image: social-api-image
+    ports:
+      - "10003:10003"
+    depends_on:
+      - mysql
+      - etcd
+      - redis
+    networks:
+      z-chat:
+
   redis:
     image: redis:alpine3.18
     ports:

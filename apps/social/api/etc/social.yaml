@@ -1,3 +1,19 @@
 Name: social
 Host: 0.0.0.0
-Port: 8888
+Port: 10003
+
+SocialRpc:
+  Etcd:
+    Hosts:
+      - 192.168.0.111:12379
+    Key: social.rpc
+
+UserRpc:
+  Etcd:
+    Hosts:
+      - 192.168.0.111:12379
+    Key: user.rpc
+
+JwtAuth:
+  AccessSecret: wpzyyds
+
