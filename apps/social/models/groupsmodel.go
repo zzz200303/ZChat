@@ -57,7 +57,7 @@ func (c customGroupsModel) ListByGroupIds(ctx context.Context, ids []string) ([]
 	}
 }
 
-// NewGroupsModel returns a model for the groupsbase table.
+// NewGroupsModel returns a models for the groupsbase table.
 func NewGroupsModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) GroupsModel {
 	return &customGroupsModel{
 		defaultGroupsModel: newGroupsModel(conn, c, opts...),

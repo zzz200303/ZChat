@@ -30,7 +30,7 @@ func NewGroupPutInHandleLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 func (l *GroupPutInHandleLogic) GroupPutInHandle(in *social.GroupPutInHandleReq) (*social.GroupPutInHandleResp, error) {
 	// todo: add your logic here and delete this line
 
-	groupReq, err := l.svcCtx.GroupRequestsModel.FindOne(l.ctx, int64(in.GroupReqId))
+	groupReq, err := l.svcCtx.GroupRequestsModel.FindOne(l.ctx, uint64(in.GroupReqId))
 	if err != nil {
 		return nil, errors.Wrapf(err, "find friend req err %v req %v", err, in.GroupReqId)
 	}
@@ -59,8 +59,8 @@ func (l *GroupPutInHandleLogic) GroupPutInHandle(in *social.GroupPutInHandleReq)
 		groupMember := &models.GroupMembers{
 			GroupId:     groupReq.GroupId,
 			UserId:      groupReq.ReqId,
-			RoleLevel:   int(constants.AtLargeGroupRoleLevel),
-			OperatorUid: in.HandleUid,
+			RoleLevel:   int64(constants.AtLargeGroupRoleLevel),
+			OperatorUid: sql.NullString{String: in.HandleUid},
 		}
 		_, err = l.svcCtx.GroupMembersModel.InsertWithSession(l.ctx, session, groupMember)
 		if err != nil {

@@ -69,7 +69,7 @@ func (c customGroupRequestsModel) ListNoHandler(ctx context.Context, groupId str
 	}
 }
 
-// NewGroupRequestsModel returns a model for the database table.
+// NewGroupRequestsModel returns a models for the database table.
 func NewGroupRequestsModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) GroupRequestsModel {
 	return &customGroupRequestsModel{
 		defaultGroupRequestsModel: newGroupRequestsModel(conn, c, opts...),

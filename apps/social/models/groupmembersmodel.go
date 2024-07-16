@@ -81,7 +81,7 @@ func (c customGroupMembersModel) ListByGroupId(ctx context.Context, groupId stri
 	}
 }
 
-// NewGroupMembersModel returns a model for the database table.
+// NewGroupMembersModel returns a models for the database table.
 func NewGroupMembersModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) GroupMembersModel {
 	return &customGroupMembersModel{
 		defaultGroupMembersModel: newGroupMembersModel(conn, c, opts...),

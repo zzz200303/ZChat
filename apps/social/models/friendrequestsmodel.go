@@ -47,8 +47,7 @@ func (c customFriendRequestsModel) UpdateWithSesson(ctx context.Context, session
 	return err
 }
 
-func (c customFriendRequestsModel) Trans(ctx context.Context, fn func(ctx context.Context,
-	session sqlx.Session) error) error {
+func (c customFriendRequestsModel) Trans(ctx context.Context, fn func(ctx context.Context, session sqlx.Session) error) error {
 	return c.TransactCtx(ctx, func(ctx context.Context, session sqlx.Session) error {
 		return fn(ctx, session)
 	})
@@ -83,7 +82,7 @@ func (c customFriendRequestsModel) ListNoHandler(ctx context.Context, userId str
 	}
 }
 
-// NewFriendRequestsModel returns a model for the database table.
+// NewFriendRequestsModel returns a models for the database table.
 func NewFriendRequestsModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) FriendRequestsModel {
 	return &customFriendRequestsModel{
 		defaultFriendRequestsModel: newFriendRequestsModel(conn, c, opts...),

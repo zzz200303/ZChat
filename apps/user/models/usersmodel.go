@@ -80,7 +80,7 @@ func (c customUsersModel) ListByName(ctx context.Context, name string) ([]*Users
 	}
 }
 
-// NewUsersModel returns a model for the database table.
+// NewUsersModel returns a models for the database table.
 func NewUsersModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) UsersModel {
 	return &customUsersModel{
 		defaultUsersModel: newUsersModel(conn, c, opts...),
