@@ -37,9 +37,14 @@ func (s *UserServer) Register(ctx context.Context, in *user.RegisterReq) (*user.
 	return l.Register(in)
 }
 
-func (s *UserServer) FindUser(ctx context.Context, in *user.FindUserReq) (*user.FindUserResp, error) {
-	l := logic.NewFindUserLogic(ctx, s.svcCtx)
-	return l.FindUser(in)
+func (s *UserServer) FindUserByName(ctx context.Context, in *user.FindUserByNameReq) (*user.FindUserByNameResp, error) {
+	l := logic.NewFindUserByNameLogic(ctx, s.svcCtx)
+	return l.FindUserByName(in)
+}
+
+func (s *UserServer) FindUserByID(ctx context.Context, in *user.FindUserByIDReq) (*user.FindUserByIDResp, error) {
+	l := logic.NewFindUserByIDLogic(ctx, s.svcCtx)
+	return l.FindUserByID(in)
 }
 
 func (s *UserServer) AllUser(ctx context.Context, in *user.AllUserReq) (*user.AllUserResp, error) {

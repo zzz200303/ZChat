@@ -37,19 +37,26 @@ message RegisterResp {
   int64 expire = 2;
 }
 
-message FindUserReq {
-  string name = 1;
-  string id = 2;
-}
-
-message FindUserResp {
-  repeated UserEntity user = 1;
-}
-
 message AllUserReq {
 }
 
 message AllUserResp {
+  repeated UserEntity user = 1;
+}
+
+message FindUserByNameReq {
+  string name = 1;
+}
+
+message FindUserByNameResp {
+  repeated UserEntity user = 1;
+}
+
+message FindUserByIDReq {
+  string id = 1;
+}
+
+message FindUserByIDResp {
   repeated UserEntity user = 1;
 }
 
@@ -60,7 +67,9 @@ service User {
 
   rpc Register(RegisterReq) returns (RegisterResp);
 
-  rpc FindUser(FindUserReq) returns (FindUserResp);
+  rpc FindUserByName(FindUserByNameReq) returns (FindUserByNameResp);
+
+  rpc FindUserByID(FindUserByIDReq) returns (FindUserByIDResp);
 
   rpc AllUser(AllUserReq) returns (AllUserResp);
 }

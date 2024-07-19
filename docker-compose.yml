@@ -6,7 +6,7 @@ services:
       dockerfile: apps/user/rpc/Dockerfile
     image: user-rpc-image
     ports:
-      - "10000:10000"
+      - "20000:20000"
     depends_on:
       - mysql
       - etcd
@@ -14,47 +14,19 @@ services:
     networks:
       z-chat:
 
-  user-api:
-    build:
-      context: .
-      dockerfile: apps/user/api/Dockerfile
-    image: user-api-image
-    ports:
-      - "10001:10001"
-    depends_on:
-      - mysql
-      - etcd
-      - redis
-    networks:
-        z-chat:
-
-  social-rpc:
-    build:
-      context: .
-      dockerfile: apps/social/rpc/Dockerfile
-    image: social-rpc-image
-    ports:
-      - "10002:10002"
-    depends_on:
-      - mysql
-      - etcd
-      - redis
-    networks:
-      z-chat:
-
-  social-api:
-    build:
-      context: .
-      dockerfile: apps/social/api/Dockerfile
-    image: social-api-image
-    ports:
-      - "10003:10003"
-    depends_on:
-      - mysql
-      - etcd
-      - redis
-    networks:
-      z-chat:
+#  user-api:
+#    build:
+#      context: .
+#      dockerfile: apps/user/api/Dockerfile
+#    image: user-api-image
+#    ports:
+#      - "10001:10001"
+#    depends_on:
+#      - mysql
+#      - etcd
+#      - redis
+#    networks:
+#        z-chat:
 
   redis:
     image: redis:alpine3.18
@@ -95,6 +67,7 @@ services:
     container_name: mysql
     volumes:
       - ./components/mysql/data:/var/lib/mysql
+      - ./deploy/initdb:/docker-entrypoint-initdb.d
       - /etc/localtime:/etc/localtime
     environment:
       MYSQL_ROOT_PASSWORD: wpzyyds

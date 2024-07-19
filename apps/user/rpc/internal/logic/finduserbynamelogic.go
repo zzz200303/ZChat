@@ -11,27 +11,27 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type AllUserLogic struct {
+type FindUserByNameLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewAllUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AllUserLogic {
-	return &AllUserLogic{
+func NewFindUserByNameLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FindUserByNameLogic {
+	return &FindUserByNameLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *AllUserLogic) AllUser(in *user.AllUserReq) (*user.AllUserResp, error) {
+func (l *FindUserByNameLogic) FindUserByName(in *user.FindUserByNameReq) (*user.FindUserByNameResp, error) {
 	var (
 		userEntitys []*models.Users
 		err         error
 	)
 
-	userEntitys, err = l.svcCtx.UsersModel.AllUser(l.ctx)
+	userEntitys, err = l.svcCtx.UsersModel.ListByName(l.ctx, in.Name)
 
 	if err != nil {
 		return nil, err
@@ -41,8 +41,5 @@ func (l *AllUserLogic) AllUser(in *user.AllUserReq) (*user.AllUserResp, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	return &user.AllUserResp{
-		User: resp,
-	}, nil
+	return &user.FindUserByNameResp{User: resp}, nil
 }

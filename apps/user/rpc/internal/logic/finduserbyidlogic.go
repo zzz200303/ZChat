@@ -11,38 +11,36 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type AllUserLogic struct {
+type FindUserByIDLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewAllUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AllUserLogic {
-	return &AllUserLogic{
+func NewFindUserByIDLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FindUserByIDLogic {
+	return &FindUserByIDLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *AllUserLogic) AllUser(in *user.AllUserReq) (*user.AllUserResp, error) {
+func (l *FindUserByIDLogic) FindUserByID(in *user.FindUserByIDReq) (*user.FindUserByIDResp, error) {
 	var (
-		userEntitys []*models.Users
-		err         error
+		userEntity *models.Users
+		err        error
 	)
 
-	userEntitys, err = l.svcCtx.UsersModel.AllUser(l.ctx)
+	userEntity, err = l.svcCtx.UsersModel.FindOne(l.ctx, in.Id)
 
 	if err != nil {
 		return nil, err
 	}
 	var resp []*user.UserEntity
-	err = copier.Copy(&resp, &userEntitys)
+	err = copier.Copy(&resp, &userEntity)
 	if err != nil {
 		return nil, err
 	}
 
-	return &user.AllUserResp{
-		User: resp,
-	}, nil
+	return &user.FindUserByIDResp{User: resp}, nil
 }
