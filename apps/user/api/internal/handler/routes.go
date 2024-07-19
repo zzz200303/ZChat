@@ -32,10 +32,22 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		[]rest.Route{
 			{
-				// 获取用户信息
+				// 获取所有用户
 				Method:  http.MethodGet,
-				Path:    "/user",
-				Handler: user.DetailHandler(serverCtx),
+				Path:    "/alluser",
+				Handler: user.AlluserHandler(serverCtx),
+			},
+			{
+				// 用id查找用户
+				Method:  http.MethodGet,
+				Path:    "/finduserbyid",
+				Handler: user.FinduserbyidHandler(serverCtx),
+			},
+			{
+				// 用name查找用户
+				Method:  http.MethodGet,
+				Path:    "/finduserbyname",
+				Handler: user.FinduserbynameHandler(serverCtx),
 			},
 		},
 		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),

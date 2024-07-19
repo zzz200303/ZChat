@@ -1,47 +1,55 @@
 syntax = "v1"
 
-type User {
-	Id       string `json:"id"`
-	Mobile   string `json:"mobile"`
-	Nickname string `json:"nickname"`
-	Sex      byte   `json:"sex"`
-	Avatar   string `json:"avatar"`
-}
-
 type (
+	// 定义注册接口的请求体
 	RegisterReq {
-		Phone    string `json:"phone"`
+		Name     string `json:"name"`
 		Password string `json:"password"`
-		Nickname string `json:"nickname"`
-		Sex      byte   `json:"sex"`
-		Avatar   string `json:"avatar"`
 	}
+	// 定义注册接口的响应体
 	RegisterResp {
 		Token  string `json:"token"`
 		Expire int64  `json:"expire"`
 	}
-)
-
-type (
+	// 定义登录接口的请求体
 	LoginReq {
-		Phone    string `json:"phone"`
+		Name     string `json:"name"`
 		Password string `json:"password"`
 	}
+	// 定义登录接口的响应体
 	LoginResp {
 		Token  string `json:"token"`
 		Expire int64  `json:"expire"`
 	}
-)
-
-type (
-	UserInfoReq  {}
-	UserInfoResp {
-		Info User `json:"info"`
+	// 定义获取所有用户的请求体
+	AllUserReq  {}
+	// 定义获取所有用户的响应体
+	AllUserResp {
+		Users []UserEntity `json:"users"`
+	}
+	// 定义查找用户的请求体
+	FindUserByIDReq {
+		Id string `json:"id"`
+	}
+	// 定义查找用户的请求体
+	FindUserByNameReq {
+		Name string `json:"name"`
+	}
+	// 定义查找用户的响应体
+	FindUserByIDResp {
+		Users []UserEntity `json:"users"`
+	}
+	FindUserByNameResp {
+		Users []UserEntity `json:"users"`
+	}
+	// 定义用户实体
+	UserEntity {
+		Id   string `json:"id"`
+		Name string `json:"name"`
 	}
 )
 
-
-// no need login
+// 定义 HTTP 服务
 @server (
 	prefix: user
 	group:  user
@@ -56,15 +64,23 @@ service user {
 	post /login (LoginReq) returns (LoginResp)
 }
 
-//need login
+// 需要登录
 @server (
 	prefix: user
 	group:  user
 	jwt:    JwtAuth
 )
 service user {
-	@doc "获取用户信息"
-	@handler detail
-	get /user (UserInfoReq) returns (UserInfoResp)
+	@doc "获取所有用户"
+	@handler alluser
+	get /alluser (AllUserReq) returns (AllUserResp)
+
+	@doc "用id查找用户"
+	@handler finduserbyid
+	get /finduserbyid (FindUserByIDReq) returns (FindUserByIDResp)
+
+	@doc "用name查找用户"
+	@handler finduserbyname
+	get /finduserbyname (FindUserByNameReq) returns (FindUserByNameResp)
 }
 

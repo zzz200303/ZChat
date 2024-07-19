@@ -1,9 +1,7 @@
 package user
 
 import (
-	"ZeZeIM/apps/user/rpc/pb/user"
 	"context"
-	"github.com/jinzhu/copier"
 
 	"ZeZeIM/apps/user/api/internal/svc"
 	"ZeZeIM/apps/user/api/internal/types"
@@ -17,7 +15,7 @@ type RegisterLogic struct {
 	svcCtx *svc.ServiceContext
 }
 
-// NewRegisterLogic 用户注册
+// 用户注册
 func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *RegisterLogic {
 	return &RegisterLogic{
 		Logger: logx.WithContext(ctx),
@@ -27,22 +25,7 @@ func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Register
 }
 
 func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterResp, err error) {
-	registerResp, err := l.svcCtx.User.Register(l.ctx, &user.RegisterReq{
-		Phone:    req.Phone,
-		Nickname: req.Nickname,
-		Password: req.Password,
-		Avatar:   req.Avatar,
-		Sex:      int32(req.Sex),
-	})
-	if err != nil {
-		return nil, err
-	}
+	// todo: add your logic here and delete this line
 
-	var res types.RegisterResp
-	err = copier.Copy(&res, registerResp)
-	if err != nil {
-		return nil, err
-	}
-
-	return &res, nil
+	return
 }

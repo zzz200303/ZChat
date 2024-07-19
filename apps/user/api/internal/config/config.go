@@ -1,19 +1,11 @@
 package config
 
-import (
-	"github.com/zeromicro/go-zero/rest"
-	"github.com/zeromicro/go-zero/zrpc"
-)
+import "github.com/zeromicro/go-zero/rest"
 
 type Config struct {
 	rest.RestConf
-	Mysql struct {
-		DataSource string
-	}
-	UserRpc zrpc.RpcClientConf
-
 	JwtAuth struct {
 		AccessSecret string
-		//AccessExpire int64
+		AccessExpire int64
 	}
 }

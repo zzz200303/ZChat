@@ -22,7 +22,7 @@ func NewUserServer(svcCtx *svc.ServiceContext) *UserServer {
 	}
 }
 
-func (s *UserServer) Ping(ctx context.Context, in *user.Request) (*user.Response, error) {
+func (s *UserServer) Ping(ctx context.Context, in *user.PingReq) (*user.PingResp, error) {
 	l := logic.NewPingLogic(ctx, s.svcCtx)
 	return l.Ping(in)
 }
@@ -37,12 +37,12 @@ func (s *UserServer) Register(ctx context.Context, in *user.RegisterReq) (*user.
 	return l.Register(in)
 }
 
-func (s *UserServer) GetUserInfo(ctx context.Context, in *user.GetUserInfoReq) (*user.GetUserInfoResp, error) {
-	l := logic.NewGetUserInfoLogic(ctx, s.svcCtx)
-	return l.GetUserInfo(in)
-}
-
 func (s *UserServer) FindUser(ctx context.Context, in *user.FindUserReq) (*user.FindUserResp, error) {
 	l := logic.NewFindUserLogic(ctx, s.svcCtx)
 	return l.FindUser(in)
+}
+
+func (s *UserServer) AllUser(ctx context.Context, in *user.AllUserReq) (*user.AllUserResp, error) {
+	l := logic.NewAllUserLogic(ctx, s.svcCtx)
+	return l.AllUser(in)
 }

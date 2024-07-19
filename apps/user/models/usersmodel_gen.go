@@ -39,12 +39,8 @@ type (
 
 	Users struct {
 		Id        string         `db:"id"`
-		Avatar    string         `db:"avatar"`
-		Nickname  string         `db:"nickname"`
-		Phone     string         `db:"phone"`
+		Name      string         `db:"name"`
 		Password  sql.NullString `db:"password"`
-		Status    sql.NullInt64  `db:"status"`
-		Sex       sql.NullInt64  `db:"sex"`
 		CreatedAt sql.NullTime   `db:"created_at"`
 		UpdatedAt sql.NullTime   `db:"updated_at"`
 	}
@@ -86,8 +82,8 @@ func (m *defaultUsersModel) FindOne(ctx context.Context, id string) (*Users, err
 func (m *defaultUsersModel) Insert(ctx context.Context, data *Users) (sql.Result, error) {
 	usersIdKey := fmt.Sprintf("%s%v", cacheUsersIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?)", m.table, usersRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Id, data.Avatar, data.Nickname, data.Phone, data.Password, data.Status, data.Sex)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?)", m.table, usersRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Id, data.Name, data.Password)
 	}, usersIdKey)
 	return ret, err
 }
@@ -96,7 +92,7 @@ func (m *defaultUsersModel) Update(ctx context.Context, data *Users) error {
 	usersIdKey := fmt.Sprintf("%s%v", cacheUsersIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, usersRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Avatar, data.Nickname, data.Phone, data.Password, data.Status, data.Sex, data.Id)
+		return conn.ExecCtx(ctx, query, data.Name, data.Password, data.Id)
 	}, usersIdKey)
 	return err
 }
