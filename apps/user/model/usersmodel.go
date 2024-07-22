@@ -26,12 +26,8 @@ type (
 )
 
 func (c customUsersModel) FindOneByName(ctx context.Context, name string) (*Users, error) {
-    usersIdKey := fmt.Sprintf("%s%v", cacheUsersIdPrefix, name)
 	var resp Users
-	err := c.QueryRowCtx(ctx, &resp, usersIdKey, func(ctx context.Context, conn sqlx.SqlConn, v interface{}) error {
-		query := fmt.Sprintf("select %s from %s where `name` = ? limit 1", usersRows, c.table)
-		return conn.QueryRowCtx(ctx, v, query, name)
-	})
+	err := c.QueryRowNoCacheCtx(ctx, &resp, "select %s from %s where name = ?", usersRows, c.table, name)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -41,7 +37,6 @@ func (c customUsersModel) FindOneByName(ctx context.Context, name string) (*User
 		return nil, err
 	}
 }
-
 
 func (c customUsersModel) AllUser(ctx context.Context) ([]*Users, error) {
 	query := fmt.Sprintf("select %s from %s", usersRows, c.table)

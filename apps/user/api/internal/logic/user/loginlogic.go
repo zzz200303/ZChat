@@ -2,11 +2,9 @@ package user
 
 import (
 	"ZChat/apps/user/api/internal/svc"
+	"ZChat/apps/user/api/internal/types"
 	"ZChat/apps/user/rpc/pb/user"
 	"context"
-	"github.com/jinzhu/copier"
-
-	"ZChat/apps/user/api/internal/types"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -35,9 +33,8 @@ func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginResp, err erro
 	if err != nil {
 		return nil, err
 	}
-
 	var res types.LoginResp
-	copier.Copy(&res, loginResp)
-
+	res.Expire = loginResp.Expire
+	res.Token = loginResp.Token
 	return &res, nil
 }
