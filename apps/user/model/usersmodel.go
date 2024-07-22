@@ -27,7 +27,8 @@ type (
 
 func (c customUsersModel) FindOneByName(ctx context.Context, name string) (*Users, error) {
 	var resp Users
-	err := c.QueryRowNoCacheCtx(ctx, &resp, "select %s from %s where name = ?", usersRows, c.table, name)
+	query := fmt.Sprintf("select %s from %s where `name` = ?", usersRows, c.table)
+	err := c.QueryRowNoCacheCtx(ctx, &resp, query, name)
 	switch err {
 	case nil:
 		return &resp, nil
