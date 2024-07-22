@@ -1,10 +1,12 @@
 package user
 
 import (
+	"ZChat/apps/user/api/internal/svc"
+	"ZChat/apps/user/rpc/pb/user"
 	"context"
+	"github.com/jinzhu/copier"
 
-	"ZeZeIM/apps/user/api/internal/svc"
-	"ZeZeIM/apps/user/api/internal/types"
+	"ZChat/apps/user/api/internal/types"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -26,6 +28,16 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic 
 
 func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginResp, err error) {
 	// todo: add your logic here and delete this line
+	loginResp, err := l.svcCtx.User.Login(l.ctx, &user.LoginReq{
+		Name:     req.Name,
+		Password: req.Password,
+	})
+	if err != nil {
+		return nil, err
+	}
 
-	return
+	var res types.LoginResp
+	copier.Copy(&res, loginResp)
+
+	return &res, nil
 }

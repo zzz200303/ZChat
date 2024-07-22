@@ -6,9 +6,9 @@ package server
 import (
 	"context"
 
-	"ZeZeIM/apps/user/rpc/internal/logic"
-	"ZeZeIM/apps/user/rpc/internal/svc"
-	"ZeZeIM/apps/user/rpc/pb/user"
+	"ZChat/apps/user/rpc/internal/logic"
+	"ZChat/apps/user/rpc/internal/svc"
+	"ZChat/apps/user/rpc/pb/user"
 )
 
 type UserServer struct {
@@ -35,16 +35,6 @@ func (s *UserServer) Login(ctx context.Context, in *user.LoginReq) (*user.LoginR
 func (s *UserServer) Register(ctx context.Context, in *user.RegisterReq) (*user.RegisterResp, error) {
 	l := logic.NewRegisterLogic(ctx, s.svcCtx)
 	return l.Register(in)
-}
-
-func (s *UserServer) FindUserByName(ctx context.Context, in *user.FindUserByNameReq) (*user.FindUserByNameResp, error) {
-	l := logic.NewFindUserByNameLogic(ctx, s.svcCtx)
-	return l.FindUserByName(in)
-}
-
-func (s *UserServer) FindUserByID(ctx context.Context, in *user.FindUserByIDReq) (*user.FindUserByIDResp, error) {
-	l := logic.NewFindUserByIDLogic(ctx, s.svcCtx)
-	return l.FindUserByID(in)
 }
 
 func (s *UserServer) AllUser(ctx context.Context, in *user.AllUserReq) (*user.AllUserResp, error) {

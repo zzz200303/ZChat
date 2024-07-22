@@ -1,17 +1,16 @@
 package logic
 
 import (
-	"ZeZeIM/apps/user/models"
-	"ZeZeIM/pkg/ctxdata"
-	"ZeZeIM/pkg/encrypt"
-	"ZeZeIM/pkg/wuid"
+	"ZChat/apps/user/model"
+	"ZChat/pkg/ctxdata"
+	"ZChat/pkg/encrypt"
 	"context"
 	"database/sql"
 	"github.com/pkg/errors"
 	"time"
 
-	"ZeZeIM/apps/user/rpc/internal/svc"
-	"ZeZeIM/apps/user/rpc/pb/user"
+	"ZChat/apps/user/rpc/internal/svc"
+	"ZChat/apps/user/rpc/pb/user"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -30,22 +29,25 @@ func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Register
 	}
 }
 
+var (
+	ErrPhoneIsRegister = errors.New("手机号已经注册过")
+)
+
 func (l *RegisterLogic) Register(in *user.RegisterReq) (*user.RegisterResp, error) {
 	// todo: add your logic here and delete this line
 
 	// 1. 验证用户是否注册，根据手机号码验证
-	userEntity, err := l.svcCtx.UsersModel.FindByName(l.ctx, in.Name)
-	if err != nil && !errors.Is(err, models.ErrNotFound) {
+	userEntity, err := l.svcCtx.UsersModel.FindOneByName(l.ctx, in.Name)
+	if err != nil && err != model.ErrNotFound {
 		return nil, err
 	}
 
 	if userEntity != nil {
-		return nil, err
+		return nil, ErrPhoneIsRegister
 	}
 
 	// 定义用户数据
-	userEntity = &models.Users{
-		Id:   wuid.GenUid(l.svcCtx.Config.Mysql.DataSource),
+	userEntity = &model.Users{
 		Name: in.Name,
 	}
 
@@ -67,8 +69,7 @@ func (l *RegisterLogic) Register(in *user.RegisterReq) (*user.RegisterResp, erro
 
 	// 生成token
 	now := time.Now().Unix()
-	token, err := ctxdata.GetJwtToken(l.svcCtx.Config.Jwt.AccessSecret, now, l.svcCtx.Config.Jwt.AccessExpire,
-		userEntity.Id)
+	token, err := ctxdata.GetJwtToken(l.svcCtx.Config.Jwt.AccessSecret, now, l.svcCtx.Config.Jwt.AccessExpire, userEntity.Id, userEntity.Name)
 	if err != nil {
 		return nil, err
 	}

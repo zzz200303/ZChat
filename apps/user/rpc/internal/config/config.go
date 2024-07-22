@@ -7,12 +7,14 @@ import (
 
 type Config struct {
 	zrpc.RpcServerConf
+
 	Mysql struct {
 		DataSource string
 	}
 
 	Cache cache.CacheConf
-	Jwt   struct {
+
+	Jwt struct {
 		AccessSecret string
 		AccessExpire int64
 	}

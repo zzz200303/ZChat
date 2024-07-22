@@ -1,0 +1,50 @@
+Name: singlechat-api
+Host: 0.0.0.0
+Port: 10002
+
+JwtAuth:
+  AccessSecret: jwtauthwpzyyds
+  AccessExpire: 8640000
+
+Auth:
+  AccessSecret: jwtauthwpzyyds
+  AccessExpire: 8640000
+
+Log:
+  Encoding: plain
+
+Mysql:
+  DataSource: root:wpzyyds@tcp(192.168.0.111:3306)/zchat?charset=utf8mb4
+
+Client:
+  MessageBuf: 128
+  ProducerCache: 128
+  ConsumerCache: 128
+  upgrade:
+    HandshakeTimeout: 5
+    ReadBufferSize: 10240
+    WriteBufferSize: 10240
+
+
+KqConf:
+  Name: chat-mq
+  Brokers:
+    - 192.168.0.111:9092
+  Group: chat-group
+  Topic: chat
+  Offset: first
+  Consumers: 1
+
+
+#配置user服务的rpc
+UserRpcService:
+  Etcd:
+    Hosts:
+      - 192.168.0.111:2379
+    Key: user.rpc
+
+
+Redis:
+  Host: 192.168.0.111:6379
+  Type: node
+  Pass:

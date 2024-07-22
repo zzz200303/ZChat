@@ -1,14 +1,15 @@
 package svc
 
 import (
-	"ZeZeIM/apps/user/models"
-	"ZeZeIM/apps/user/rpc/internal/config"
+	"ZChat/apps/user/model"
+	"ZChat/apps/user/rpc/internal/config"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
 type ServiceContext struct {
 	Config config.Config
-	models.UsersModel
+
+	model.UsersModel
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -17,6 +18,6 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
 		Config: c,
 
-		UsersModel: models.NewUsersModel(sqlConn, c.Cache),
+		UsersModel: model.NewUsersModel(sqlConn, c.Cache),
 	}
 }

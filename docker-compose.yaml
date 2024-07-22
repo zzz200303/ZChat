@@ -1,0 +1,128 @@
+version: '3'
+
+services:
+  etcd:
+    image: bitnami/etcd:3.4.15
+    container_name: etcd
+    ports: # 设置端口映射
+      - "2379:2379"
+    environment:
+      - ETCD_ENABLE_V2=true
+      - ALLOW_NONE_AUTHENTICATION=yes
+      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
+      - ETCD_NAME=etcd
+    networks:
+      z-chat:
+
+  redis:
+    image: redis:alpine3.18
+    ports:
+      - 6379:6379
+    container_name: redis
+    volumes:
+      - ./components/redis/data:/data
+      - ./components/redis/config/redis.conf:/usr/local/redis/config/redis.conf
+    environment:
+      TZ: Asia/Shanghai
+    restart: always
+    networks:
+      z-chat:
+    command: redis-server --appendonly yes
+
+  mysql:
+    image: mysql:5.7
+    ports:
+      - 3306:3306
+    container_name: mysql
+    volumes:
+      - ./components/mysql/data:/var/lib/mysql
+      - /etc/localtime:/etc/localtime
+      - ./deploy/sql/init.sql:/docker-entrypoint-initdb.d/init.sql  # 挂载SQL文件
+    environment:
+      MYSQL_ROOT_PASSWORD: wpzyyds
+    restart: always
+    networks:
+      z-chat:
+
+  user-rpc:
+    build:
+      context: .
+      dockerfile: apps/user/rpc/Dockerfile
+    image: user-rpc-image
+    ports:
+      - "10000:10000"
+    depends_on:
+      - mysql
+      - etcd
+      - redis
+    networks:
+      z-chat:
+
+  user-api:
+    build:
+      context: .
+      dockerfile: apps/user/api/Dockerfile
+    image: user-api-image
+    ports:
+      - "10001:10001"
+    depends_on:
+      - mysql
+      - etcd
+      - redis
+    networks:
+      z-chat:
+
+  zookeeper:
+    image: bitnami/zookeeper
+    ports:
+      - 2181:2181
+    container_name: zookeeper
+    volumes:
+      - /etc/localtime:/etc/localtime
+    environment:
+      - TZ=Asia/Shanghai
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    restart: always
+    networks:
+      z-chat:
+
+  kafka:
+    image: bitnami/kafka
+    container_name: kafka
+    restart: always
+    ports:
+      - 9092:9092
+    environment:
+      TZ: Asia/Shanghai
+      KAFKA_BROKER_ID: 0
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: "ws2ms_chat:8:1,ms2ps_chat:8:1,msg_to_mongo:8:1"
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://192.168.0.111:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT"
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_LISTENERS: INSIDE://:9092
+      KAFKA_HEAP_OPTS: "-Xmx512M -Xms256M"
+    depends_on:
+      - zookeeper
+    networks:
+      z-chat:
+        
+  singlechat-api:
+    build:
+      context: .
+      dockerfile: apps/single-chat/api/Dockerfile
+    image: singlechat-api-image
+    ports:
+      - "10002:10002"
+    depends_on:
+      - mysql
+      - etcd
+      - redis
+      - zookeeper
+      - kafka
+    networks:
+      z-chat:
+
+networks:
+  z-chat:
+    driver: bridge

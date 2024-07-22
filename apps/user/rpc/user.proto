@@ -4,8 +4,8 @@ option go_package = "./user";
 
 // model
 message UserEntity {
-  string  id = 1;                // 用户id
-  string  name = 2;          // 昵称
+  int64  id = 1;                // 用户id
+  string name = 2;              // 昵称
 }
 
 // req 与 resp
@@ -18,8 +18,8 @@ message PingResp {
 }
 
 message LoginReq {
-  string  name = 1;
-  string  password = 2;
+  string name = 1;
+  string password = 2;
 }
 
 message LoginResp {
@@ -27,9 +27,9 @@ message LoginResp {
   int64 expire = 2;
 }
 
-message RegisterReq{
-  string  name = 1;
-  string  password = 2;
+message RegisterReq {
+  string name = 1;
+  string password = 2;
 }
 
 message RegisterResp {
@@ -44,32 +44,12 @@ message AllUserResp {
   repeated UserEntity user = 1;
 }
 
-message FindUserByNameReq {
-  string name = 1;
-}
-
-message FindUserByNameResp {
-  repeated UserEntity user = 1;
-}
-
-message FindUserByIDReq {
-  string id = 1;
-}
-
-message FindUserByIDResp {
-  repeated UserEntity user = 1;
-}
-
 service User {
   rpc Ping(PingReq) returns (PingResp);
 
   rpc Login(LoginReq) returns (LoginResp);
 
   rpc Register(RegisterReq) returns (RegisterResp);
-
-  rpc FindUserByName(FindUserByNameReq) returns (FindUserByNameResp);
-
-  rpc FindUserByID(FindUserByIDReq) returns (FindUserByIDResp);
 
   rpc AllUser(AllUserReq) returns (AllUserResp);
 }

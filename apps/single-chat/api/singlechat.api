@@ -1,0 +1,40 @@
+syntax = "v1"
+
+type (
+	recordListRequest {
+		Uid       int64 `form:"uid"`
+		FriendUid int64 `form:"frienduid"`
+	}
+	MessageInfo {
+		Content  string `json:"content"`
+		From     int64  `json:"from"`
+		To       int64  `json:"to"`
+		SendTime string `json:"send_time"`
+	}
+	recordListResponse {
+		RecordList []MessageInfo `json:"recodelist"`
+	}
+)
+
+@server (
+	group:  record
+	prefix: /singlechat
+	jwt:    JwtAuth
+)
+service singlechat-api {
+	//获取用户之间的聊天记录
+	@handler recordList
+	get /recordlist (recordListRequest) returns (recordListResponse)
+}
+
+//webwocker连接
+@server (
+	group:  chatconn
+	prefix: /singlechat
+	jwt:    JwtAuth
+)
+service singlechat-api {
+	@handler ChatConn
+	get /chatconn
+}
+

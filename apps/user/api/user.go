@@ -4,9 +4,9 @@ import (
 	"flag"
 	"fmt"
 
-	"ZeZeIM/apps/user/api/internal/config"
-	"ZeZeIM/apps/user/api/internal/handler"
-	"ZeZeIM/apps/user/api/internal/svc"
+	"ZChat/apps/user/api/internal/config"
+	"ZChat/apps/user/api/internal/handler"
+	"ZChat/apps/user/api/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"

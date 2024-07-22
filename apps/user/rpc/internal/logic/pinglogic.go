@@ -3,8 +3,8 @@ package logic
 import (
 	"context"
 
-	"ZeZeIM/apps/user/rpc/internal/svc"
-	"ZeZeIM/apps/user/rpc/pb/user"
+	"ZChat/apps/user/rpc/internal/svc"
+	"ZChat/apps/user/rpc/pb/user"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -26,7 +26,5 @@ func NewPingLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PingLogic {
 func (l *PingLogic) Ping(in *user.PingReq) (*user.PingResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &user.PingResp{
-		Pong: "pong",
-	}, nil
+	return &user.PingResp{Pong: "pong"}, nil
 }

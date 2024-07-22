@@ -1,12 +1,12 @@
 package logic
 
 import (
-	"ZeZeIM/apps/user/models"
+	"ZChat/apps/user/model"
 	"context"
 	"github.com/jinzhu/copier"
 
-	"ZeZeIM/apps/user/rpc/internal/svc"
-	"ZeZeIM/apps/user/rpc/pb/user"
+	"ZChat/apps/user/rpc/internal/svc"
+	"ZChat/apps/user/rpc/pb/user"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -26,23 +26,19 @@ func NewAllUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AllUserLo
 }
 
 func (l *AllUserLogic) AllUser(in *user.AllUserReq) (*user.AllUserResp, error) {
+
 	var (
-		userEntitys []*models.Users
+		userEntitys []*model.Users
 		err         error
 	)
-
 	userEntitys, err = l.svcCtx.UsersModel.AllUser(l.ctx)
 
 	if err != nil {
 		return nil, err
 	}
-	var resp []*user.UserEntity
-	err = copier.Copy(&resp, &userEntitys)
-	if err != nil {
-		return nil, err
-	}
 
-	return &user.AllUserResp{
-		User: resp,
-	}, nil
+	var resp []*user.UserEntity
+	copier.Copy(&resp, &userEntitys)
+
+	return &user.AllUserResp{User: resp}, nil
 }

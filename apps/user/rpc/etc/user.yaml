@@ -1,18 +1,23 @@
 Name: user.rpc
-ListenOn: 192.168.0.111:20000
+ListenOn: 0.0.0.0:10000
 Etcd:
   Hosts:
-    - 192.168.0.111:12379
+    - 192.168.0.111:2379
   Key: user.rpc
 
 Mysql:
-  DataSource: root:wpzyyds@tcp(192.168.0.111:13306)/zchat?charset=utf8mb4
+  DataSource: root:wpzyyds@tcp(192.168.0.111:3306)/zchat?charset=utf8mb4
+
+Redisx:
+  Host: 192.168.0.111:6379
+  Type: node
+  Pass: z-chat
 
 Cache:
-  - Host: 192.168.0.111:16379
+  - Host: 192.168.0.111:6379
     Type: node
-    Pass:
+    Pass: z-chat
 
 Jwt:
-  AccessSecret: wpzyyds
+  AccessSecret: jwtauthwpzyyds
   AccessExpire: 8640000

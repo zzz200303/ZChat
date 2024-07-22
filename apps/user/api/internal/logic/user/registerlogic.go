@@ -1,10 +1,12 @@
 package user
 
 import (
+	"ZChat/apps/user/rpc/pb/user"
 	"context"
+	"github.com/jinzhu/copier"
 
-	"ZeZeIM/apps/user/api/internal/svc"
-	"ZeZeIM/apps/user/api/internal/types"
+	"ZChat/apps/user/api/internal/svc"
+	"ZChat/apps/user/api/internal/types"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -25,7 +27,16 @@ func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Register
 }
 
 func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterResp, err error) {
-	// todo: add your logic here and delete this line
+	registerResp, err := l.svcCtx.User.Register(l.ctx, &user.RegisterReq{
+		Name:     req.Name,
+		Password: req.Password,
+	})
+	if err != nil {
+		return nil, err
+	}
 
-	return
+	var res types.RegisterResp
+	copier.Copy(&res, registerResp)
+
+	return &res, nil
 }

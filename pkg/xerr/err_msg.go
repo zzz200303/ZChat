@@ -1,3 +1,8 @@
+/**
+ * @author: dn-jinmin/dn-jinmin
+ * @doc:
+ */
+
 package xerr
 
 var codeText = map[int]string{

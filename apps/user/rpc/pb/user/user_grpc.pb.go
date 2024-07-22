@@ -19,12 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion8
 
 const (
-	User_Ping_FullMethodName           = "/User/Ping"
-	User_Login_FullMethodName          = "/User/Login"
-	User_Register_FullMethodName       = "/User/Register"
-	User_FindUserByName_FullMethodName = "/User/FindUserByName"
-	User_FindUserByID_FullMethodName   = "/User/FindUserByID"
-	User_AllUser_FullMethodName        = "/User/AllUser"
+	User_Ping_FullMethodName     = "/User/Ping"
+	User_Login_FullMethodName    = "/User/Login"
+	User_Register_FullMethodName = "/User/Register"
+	User_AllUser_FullMethodName  = "/User/AllUser"
 )
 
 // UserClient is the client API for User service.
@@ -34,8 +32,6 @@ type UserClient interface {
 	Ping(ctx context.Context, in *PingReq, opts ...grpc.CallOption) (*PingResp, error)
 	Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
 	Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error)
-	FindUserByName(ctx context.Context, in *FindUserByNameReq, opts ...grpc.CallOption) (*FindUserByNameResp, error)
-	FindUserByID(ctx context.Context, in *FindUserByIDReq, opts ...grpc.CallOption) (*FindUserByIDResp, error)
 	AllUser(ctx context.Context, in *AllUserReq, opts ...grpc.CallOption) (*AllUserResp, error)
 }
 
@@ -77,26 +73,6 @@ func (c *userClient) Register(ctx context.Context, in *RegisterReq, opts ...grpc
 	return out, nil
 }
 
-func (c *userClient) FindUserByName(ctx context.Context, in *FindUserByNameReq, opts ...grpc.CallOption) (*FindUserByNameResp, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(FindUserByNameResp)
-	err := c.cc.Invoke(ctx, User_FindUserByName_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *userClient) FindUserByID(ctx context.Context, in *FindUserByIDReq, opts ...grpc.CallOption) (*FindUserByIDResp, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(FindUserByIDResp)
-	err := c.cc.Invoke(ctx, User_FindUserByID_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *userClient) AllUser(ctx context.Context, in *AllUserReq, opts ...grpc.CallOption) (*AllUserResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(AllUserResp)
@@ -114,8 +90,6 @@ type UserServer interface {
 	Ping(context.Context, *PingReq) (*PingResp, error)
 	Login(context.Context, *LoginReq) (*LoginResp, error)
 	Register(context.Context, *RegisterReq) (*RegisterResp, error)
-	FindUserByName(context.Context, *FindUserByNameReq) (*FindUserByNameResp, error)
-	FindUserByID(context.Context, *FindUserByIDReq) (*FindUserByIDResp, error)
 	AllUser(context.Context, *AllUserReq) (*AllUserResp, error)
 	mustEmbedUnimplementedUserServer()
 }
@@ -132,12 +106,6 @@ func (UnimplementedUserServer) Login(context.Context, *LoginReq) (*LoginResp, er
 }
 func (UnimplementedUserServer) Register(context.Context, *RegisterReq) (*RegisterResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Register not implemented")
-}
-func (UnimplementedUserServer) FindUserByName(context.Context, *FindUserByNameReq) (*FindUserByNameResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method FindUserByName not implemented")
-}
-func (UnimplementedUserServer) FindUserByID(context.Context, *FindUserByIDReq) (*FindUserByIDResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method FindUserByID not implemented")
 }
 func (UnimplementedUserServer) AllUser(context.Context, *AllUserReq) (*AllUserResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AllUser not implemented")
@@ -209,42 +177,6 @@ func _User_Register_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
-func _User_FindUserByName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(FindUserByNameReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UserServer).FindUserByName(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: User_FindUserByName_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServer).FindUserByName(ctx, req.(*FindUserByNameReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _User_FindUserByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(FindUserByIDReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UserServer).FindUserByID(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: User_FindUserByID_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServer).FindUserByID(ctx, req.(*FindUserByIDReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _User_AllUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AllUserReq)
 	if err := dec(in); err != nil {
@@ -281,14 +213,6 @@ var User_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Register",
 			Handler:    _User_Register_Handler,
-		},
-		{
-			MethodName: "FindUserByName",
-			Handler:    _User_FindUserByName_Handler,
-		},
-		{
-			MethodName: "FindUserByID",
-			Handler:    _User_FindUserByID_Handler,
 		},
 		{
 			MethodName: "AllUser",

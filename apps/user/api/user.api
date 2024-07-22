@@ -28,23 +28,25 @@ type (
 		Users []UserEntity `json:"users"`
 	}
 	// 定义查找用户的请求体
-	FindUserByIDReq {
-		Id string `json:"id"`
-	}
-	// 定义查找用户的请求体
-	FindUserByNameReq {
+	FindUserReq {
 		Name string `json:"name"`
+		Id   int64  `json:"id"` // 将 Id 类型改为 int64
 	}
 	// 定义查找用户的响应体
-	FindUserByIDResp {
+	FindUserResp {
 		Users []UserEntity `json:"users"`
 	}
-	FindUserByNameResp {
+	// 定义查找好友的请求体
+	FindFriendReq {
+		Id int64 `json:"id"` // 将 Id 类型改为 int64
+	}
+	// 定义查找好友的响应体
+	FindFriendResp {
 		Users []UserEntity `json:"users"`
 	}
 	// 定义用户实体
 	UserEntity {
-		Id   string `json:"id"`
+		Id   int64  `json:"id"` // 将 Id 类型改为 int64
 		Name string `json:"name"`
 	}
 )
@@ -74,13 +76,5 @@ service user {
 	@doc "获取所有用户"
 	@handler alluser
 	get /alluser (AllUserReq) returns (AllUserResp)
-
-	@doc "用id查找用户"
-	@handler finduserbyid
-	get /finduserbyid (FindUserByIDReq) returns (FindUserByIDResp)
-
-	@doc "用name查找用户"
-	@handler finduserbyname
-	get /finduserbyname (FindUserByNameReq) returns (FindUserByNameResp)
 }
 

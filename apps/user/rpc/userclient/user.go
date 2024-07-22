@@ -6,33 +6,27 @@ package userclient
 import (
 	"context"
 
-	"ZeZeIM/apps/user/rpc/pb/user"
+	"ZChat/apps/user/rpc/pb/user"
 
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"
 )
 
 type (
-	AllUserReq         = user.AllUserReq
-	AllUserResp        = user.AllUserResp
-	FindUserByIDReq    = user.FindUserByIDReq
-	FindUserByIDResp   = user.FindUserByIDResp
-	FindUserByNameReq  = user.FindUserByNameReq
-	FindUserByNameResp = user.FindUserByNameResp
-	LoginReq           = user.LoginReq
-	LoginResp          = user.LoginResp
-	PingReq            = user.PingReq
-	PingResp           = user.PingResp
-	RegisterReq        = user.RegisterReq
-	RegisterResp       = user.RegisterResp
-	UserEntity         = user.UserEntity
+	AllUserReq   = user.AllUserReq
+	AllUserResp  = user.AllUserResp
+	LoginReq     = user.LoginReq
+	LoginResp    = user.LoginResp
+	PingReq      = user.PingReq
+	PingResp     = user.PingResp
+	RegisterReq  = user.RegisterReq
+	RegisterResp = user.RegisterResp
+	UserEntity   = user.UserEntity
 
 	User interface {
 		Ping(ctx context.Context, in *PingReq, opts ...grpc.CallOption) (*PingResp, error)
 		Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
 		Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error)
-		FindUserByName(ctx context.Context, in *FindUserByNameReq, opts ...grpc.CallOption) (*FindUserByNameResp, error)
-		FindUserByID(ctx context.Context, in *FindUserByIDReq, opts ...grpc.CallOption) (*FindUserByIDResp, error)
 		AllUser(ctx context.Context, in *AllUserReq, opts ...grpc.CallOption) (*AllUserResp, error)
 	}
 
@@ -60,16 +54,6 @@ func (m *defaultUser) Login(ctx context.Context, in *LoginReq, opts ...grpc.Call
 func (m *defaultUser) Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error) {
 	client := user.NewUserClient(m.cli.Conn())
 	return client.Register(ctx, in, opts...)
-}
-
-func (m *defaultUser) FindUserByName(ctx context.Context, in *FindUserByNameReq, opts ...grpc.CallOption) (*FindUserByNameResp, error) {
-	client := user.NewUserClient(m.cli.Conn())
-	return client.FindUserByName(ctx, in, opts...)
-}
-
-func (m *defaultUser) FindUserByID(ctx context.Context, in *FindUserByIDReq, opts ...grpc.CallOption) (*FindUserByIDResp, error) {
-	client := user.NewUserClient(m.cli.Conn())
-	return client.FindUserByID(ctx, in, opts...)
 }
 
 func (m *defaultUser) AllUser(ctx context.Context, in *AllUserReq, opts ...grpc.CallOption) (*AllUserResp, error) {

@@ -8,19 +8,20 @@ type AllUserResp struct {
 	Users []UserEntity `json:"users"`
 }
 
-type FindUserByIDReq struct {
-	Id string `json:"id"`
+type FindFriendReq struct {
+	Id int64 `json:"id"` // 将 Id 类型改为 int64
 }
 
-type FindUserByIDResp struct {
+type FindFriendResp struct {
 	Users []UserEntity `json:"users"`
 }
 
-type FindUserByNameReq struct {
+type FindUserReq struct {
 	Name string `json:"name"`
+	Id   int64  `json:"id"` // 将 Id 类型改为 int64
 }
 
-type FindUserByNameResp struct {
+type FindUserResp struct {
 	Users []UserEntity `json:"users"`
 }
 
@@ -45,6 +46,6 @@ type RegisterResp struct {
 }
 
 type UserEntity struct {
-	Id   string `json:"id"`
+	Id   int64  `json:"id"` // 将 Id 类型改为 int64
 	Name string `json:"name"`
 }

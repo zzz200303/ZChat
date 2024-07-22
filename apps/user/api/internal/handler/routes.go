@@ -4,8 +4,8 @@ package handler
 import (
 	"net/http"
 
-	user "ZeZeIM/apps/user/api/internal/handler/user"
-	"ZeZeIM/apps/user/api/internal/svc"
+	user "ZChat/apps/user/api/internal/handler/user"
+	"ZChat/apps/user/api/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
 )
@@ -36,18 +36,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Method:  http.MethodGet,
 				Path:    "/alluser",
 				Handler: user.AlluserHandler(serverCtx),
-			},
-			{
-				// 用id查找用户
-				Method:  http.MethodGet,
-				Path:    "/finduserbyid",
-				Handler: user.FinduserbyidHandler(serverCtx),
-			},
-			{
-				// 用name查找用户
-				Method:  http.MethodGet,
-				Path:    "/finduserbyname",
-				Handler: user.FinduserbynameHandler(serverCtx),
 			},
 		},
 		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),

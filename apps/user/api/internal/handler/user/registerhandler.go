@@ -3,9 +3,9 @@ package user
 import (
 	"net/http"
 
-	"ZeZeIM/apps/user/api/internal/logic/user"
-	"ZeZeIM/apps/user/api/internal/svc"
-	"ZeZeIM/apps/user/api/internal/types"
+	"ZChat/apps/user/api/internal/logic/user"
+	"ZChat/apps/user/api/internal/svc"
+	"ZChat/apps/user/api/internal/types"
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 

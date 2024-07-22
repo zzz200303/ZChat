@@ -1,11 +1,10 @@
 package user
 
 import (
+	"ZChat/apps/user/api/internal/svc"
+	"ZChat/apps/user/api/internal/types"
+	"ZChat/apps/user/rpc/pb/user"
 	"context"
-
-	"ZeZeIM/apps/user/api/internal/svc"
-	"ZeZeIM/apps/user/api/internal/types"
-
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -25,7 +24,17 @@ func NewAlluserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AlluserLo
 }
 
 func (l *AlluserLogic) Alluser(req *types.AllUserReq) (resp *types.AllUserResp, err error) {
-	// todo: add your logic here and delete this line
 
-	return
+	users, err := l.svcCtx.User.AllUser(l.ctx, &user.AllUserReq{})
+	if err != nil {
+		return nil, err
+	}
+	var r []types.UserEntity
+	for _, user := range users.User {
+		r = append(r, types.UserEntity{
+			Id:   user.Id,
+			Name: user.Name,
+		})
+	}
+	return &types.AllUserResp{Users: r}, nil
 }

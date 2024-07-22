@@ -1,0 +1,22 @@
+syntax = "v1"
+
+type (
+	MessageInfo {
+		Content  string `json:"content"`
+		From     int64  `json:"from"`
+		To       int64  `json:"to"`
+		SendTime string `json:"send_time"`
+	}
+)
+
+//webwocker连接
+@server (
+	group:  chatconn
+	prefix: /groupchat
+	jwt:    JwtAuth
+)
+service groupchat-api {
+	@handler ChatConn
+	get /chatconn
+}
+

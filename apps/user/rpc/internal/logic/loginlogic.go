@@ -1,15 +1,16 @@
 package logic
 
 import (
-	"ZeZeIM/apps/user/models"
-	"ZeZeIM/pkg/ctxdata"
-	"ZeZeIM/pkg/encrypt"
+	"ZChat/apps/user/model"
+	"ZChat/pkg/ctxdata"
+	"ZChat/pkg/encrypt"
+	"ZChat/pkg/xerr"
 	"context"
 	"github.com/pkg/errors"
 	"time"
 
-	"ZeZeIM/apps/user/rpc/internal/svc"
-	"ZeZeIM/apps/user/rpc/pb/user"
+	"ZChat/apps/user/rpc/internal/svc"
+	"ZChat/apps/user/rpc/pb/user"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -28,28 +29,33 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic 
 	}
 }
 
-func (l *LoginLogic) Login(in *user.LoginReq) (*user.LoginResp, error) {
+var (
+	ErrPhoneNotRegister = xerr.New(xerr.SERVER_COMMON_ERROR, "手机号没有注册")
+	ErrUserPwdError     = xerr.New(xerr.SERVER_COMMON_ERROR, "密码不正确")
+)
 
-	// 1. 验证用户是否注册，根据用户名验证
-	userEntity, err := l.svcCtx.UsersModel.FindByName(l.ctx, in.Name)
+func (l *LoginLogic) Login(in *user.LoginReq) (*user.LoginResp, error) {
+	// todo: add your logic here and delete this line
+
+	// 1. 验证用户是否注册，根据手机号码验证
+	userEntity, err := l.svcCtx.UsersModel.FindOneByName(l.ctx, in.Name)
 	if err != nil {
-		if errors.Is(err, models.ErrNotFound) {
-			return nil, errors.WithStack(errors.New("用户未注册"))
+		if err == model.ErrNotFound {
+			return nil, errors.WithStack(ErrPhoneNotRegister)
 		}
-		return nil, errors.Wrapf(err, "find user by phone err %v , req %v", err, in.Name)
+		return nil, errors.Wrapf(xerr.NewDBErr(), "find user by phone err %v , req %v", err, in.Name)
 	}
 
 	// 密码验证
 	if !encrypt.ValidatePasswordHash(in.Password, userEntity.Password.String) {
-		return nil, errors.New("密码错误")
+		return nil, errors.WithStack(ErrUserPwdError)
 	}
 
 	// 生成token
 	now := time.Now().Unix()
-	token, err := ctxdata.GetJwtToken(l.svcCtx.Config.Jwt.AccessSecret, now, l.svcCtx.Config.Jwt.AccessExpire,
-		userEntity.Id)
+	token, err := ctxdata.GetJwtToken(l.svcCtx.Config.Jwt.AccessSecret, now, l.svcCtx.Config.Jwt.AccessExpire, userEntity.Id, userEntity.Name)
 	if err != nil {
-		return nil, errors.Wrapf(err, "ctxdata get jwt token err %v", err)
+		return nil, errors.Wrapf(xerr.NewDBErr(), "ctxdata get jwt token err %v", err)
 	}
 
 	return &user.LoginResp{
