@@ -36,6 +36,7 @@ func (l *RecordListLogic) RecordList(req *types.RecordListRequest) (resp *types.
 
 	for _, recodeJson := range recodeList {
 		m := types.MessageInfo{}
+		fmt.Println(recodeJson)
 		err := json.Unmarshal([]byte(recodeJson), &m)
 		if err != nil {
 			logx.Errorf("json.Unmarshal error: %v", err)
