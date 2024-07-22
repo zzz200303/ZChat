@@ -7,8 +7,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"strconv"
-
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -36,26 +34,13 @@ func (l *RecordListLogic) RecordList(req *types.RecordListRequest) (resp *types.
 	var messages []types.MessageInfo
 
 	for _, recodeJson := range recodeJsonList {
-		mJson := types.MessageJson{}
-		fmt.Println(recodeJson)
-		err := json.Unmarshal([]byte(recodeJson), &mJson)
-		if err != nil {
-			fmt.Println(err)
-			return nil, err
-		}
 		m := types.MessageInfo{}
-		m.Content = mJson.Content
-		m.From, err = strconv.ParseInt(mJson.From, 10, 64)
+		fmt.Println(recodeJson)
+		err := json.Unmarshal([]byte(recodeJson), &m)
 		if err != nil {
 			fmt.Println(err)
 			return nil, err
 		}
-		m.To, err = strconv.ParseInt(mJson.To, 10, 64)
-		if err != nil {
-			fmt.Println(err)
-			return nil, err
-		}
-		m.SendTime = mJson.SendTime
 		messages = append(messages, m)
 	}
 
