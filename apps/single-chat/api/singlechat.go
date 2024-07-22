@@ -39,6 +39,11 @@ func main() {
 		chatconn.StartMq(ctx)
 	}(ctx)
 
+	//初始化新用户检测消费者
+	go func(ctx *svc.ServiceContext) {
+		chatconn.StartNewUserMq(ctx)
+	}(ctx)
+
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
 	server.Start()
 }

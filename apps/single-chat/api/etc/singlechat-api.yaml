@@ -29,12 +29,19 @@ Client:
 
 
 KqConf:
-  Name: chat-mq
   Brokers:
     - 192.168.0.111:9092
   Group: chat-group
   Topic: chat
-  Offset: first
+  Offset: last
+  Consumers: 1
+
+NewUserKqConf:
+  Brokers:
+    - 192.168.0.111:9092
+  Group: newuser-group
+  Topic: newuser
+  Offset: last
   Consumers: 1
 
 

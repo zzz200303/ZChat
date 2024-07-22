@@ -18,6 +18,11 @@ Cache:
     Type: node
     Pass: z-chat
 
+KqPusherConf:
+  Brokers:
+    - 192.168.0.111:9092
+  Topic: newuser
+
 Jwt:
   AccessSecret: jwtauthwpzyyds
   AccessExpire: 8640000

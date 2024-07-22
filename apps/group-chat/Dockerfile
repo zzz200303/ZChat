@@ -1,4 +1,4 @@
-ROM golang:alpine AS builder
+FROM golang:alpine AS builder
 
 LABEL stage=gobuilder
 
@@ -14,8 +14,8 @@ ADD go.mod .
 ADD go.sum .
 RUN go mod download
 COPY . .
-COPY apps/single-chat/api/etc /app/etc
-RUN go build -ldflags="-s -w" -o /app/singlechat apps/single-chat/api/singlechat.go
+COPY apps/group-chat/etc /app/etc
+RUN go build -ldflags="-s -w" -o /app/groupchat apps/group-chat/groupchat.go
 
 
 FROM scratch
@@ -25,7 +25,7 @@ COPY --from=builder /usr/share/zoneinfo/Asia/Shanghai /usr/share/zoneinfo/Asia/S
 ENV TZ Asia/Shanghai
 
 WORKDIR /app
-COPY --from=builder /app/singlechat /app/singlechat
+COPY --from=builder /app/groupchat /app/groupchat
 COPY --from=builder /app/etc /app/etc
 
-CMD ["./singlechat", "-f", "etc/singlechat-api.yaml"]
+CMD ["./groupchat", "-f", "etc/groupchat-api.yaml"]

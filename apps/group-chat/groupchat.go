@@ -1,13 +1,11 @@
 package main
 
 import (
-	"flag"
-	"fmt"
-
 	"ZChat/apps/group-chat/internal/config"
 	"ZChat/apps/group-chat/internal/handler"
+	"ZChat/apps/group-chat/internal/handler/chatconn"
 	"ZChat/apps/group-chat/internal/svc"
-
+	"flag"
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
 )
@@ -23,9 +21,10 @@ func main() {
 	server := rest.MustNewServer(c.RestConf)
 	defer server.Stop()
 
+	hub := chatconn.NewHub()
+	go hub.Run()
+
 	ctx := svc.NewServiceContext(c)
 	handler.RegisterHandlers(server, ctx)
-
-	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
 	server.Start()
 }

@@ -35,6 +35,7 @@ type Config struct {
 	KqConf         kq.KqConf
 	log            logx.LogConf
 	UserRpcService zrpc.RpcClientConf
+	NewUserKqConf  kq.KqConf
 
 	//redis
 	Redis struct {

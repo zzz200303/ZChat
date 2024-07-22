@@ -2,9 +2,9 @@
 package handler
 
 import (
+	"ZChat/apps/group-chat/internal/handler/chatconn"
 	"net/http"
 
-	chatconn "ZChat/apps/group-chat/internal/handler/chatconn"
 	"ZChat/apps/group-chat/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"

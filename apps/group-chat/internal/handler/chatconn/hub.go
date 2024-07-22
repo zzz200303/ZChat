@@ -4,6 +4,15 @@
 
 package chatconn
 
+import (
+	"ZChat/apps/group-chat/internal/svc"
+	"ZChat/apps/group-chat/internal/types"
+	"ZChat/apps/user/rpc/pb/user"
+	"context"
+	"fmt"
+	"net/http"
+)
+
 // Hub maintains the set of active clients and broadcasts messages to the
 // clients.
 type Hub struct {
@@ -29,7 +38,22 @@ func NewHub() *Hub {
 	}
 }
 
-func (h *Hub) run() {
+func (h *Hub) connAllUser(svc *svc.ServiceContext, w http.ResponseWriter, r *http.Request) {
+	userList, err := svc.UserRpcService.AllUser(context.Background(), &user.AllUserReq{})
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	for _, userEntity := range userList.User {
+		var u = types.User{}
+		u.Id = userEntity.Id
+		u.Name = userEntity.Name
+		fmt.Println(u)
+		serveWs(h, w, r, u)
+	}
+}
+
+func (h *Hub) Run() {
 	for {
 		select {
 		case client := <-h.register:

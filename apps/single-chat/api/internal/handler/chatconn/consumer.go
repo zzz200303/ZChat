@@ -83,3 +83,24 @@ func sendUserMessage(message types.MessageInfo) {
 	// 如果用户在线，将消息发送到在线消息通道，不用redis
 	node.CacheOnlineMessage <- message
 }
+
+// StartNewUserMq 启动新用户消息队列消费
+func StartNewUserMq(svcCtx *svc.ServiceContext) {
+	// 创建Kafka队列
+	q := kq.MustNewQueue(svcCtx.Config.NewUserKqConf, kq.WithHandle( //kafka接收到消息后的处理函数
+		func(k, v string) error {
+			logx.Info("kafka消费消息.......") // 记录日志，表示正在消费Kafka消息
+			uid, err := strconv.ParseInt(v, 10, 64)
+			if err != nil {
+				fmt.Println(err)
+				return err // 返回错误
+			}
+			err = InitUser(svcCtx, uid) // 调用dispatch处理消息
+			if err != nil {
+				return err // 如果处理消息时发生错误，返回错误
+			}
+			return nil // 处理成功，返回nil
+		}))
+	defer q.Stop() // 在函数退出时停止队列
+	q.Start()      // 启动队列
+}

@@ -104,6 +104,17 @@ func InitAllUser(svcCtx *svc.ServiceContext) error {
 	return nil // 返回nil表示成功
 }
 
+func InitUser(svcCtx *svc.ServiceContext, uid int64) error {
+	usersMap[uid] = &Node{ // 为新用户创建节点
+		Uid:                uid,
+		WsConn:             (*websocket.Conn)(nil),
+		CacheOnlineMessage: make(chan types.MessageInfo, svcCtx.Config.Client.MessageBuf), // 初始化在线消息通道
+		SvcCtx:             svcCtx,
+	}
+	logx.Info("初始化用户成功") // 记录初始化成功日志
+	return nil           // 返回nil表示成功
+}
+
 // SendMQMessage 从前端接收到消息,发送到Kafka
 func (n *Node) SendMQMessage() {
 	defer func() {

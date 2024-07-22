@@ -8,6 +8,9 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/pkg/errors"
+	"github.com/zeromicro/go-queue/kq"
+	"log"
+	"strconv"
 	"time"
 
 	"ZChat/apps/user/rpc/internal/svc"
@@ -65,7 +68,7 @@ func (l *RegisterLogic) Register(in *user.RegisterReq) (*user.RegisterResp, erro
 
 	fmt.Println(userEntity)
 
-	_, err = l.svcCtx.UsersModel.Insert(l.ctx, userEntity)
+	sqlres, err := l.svcCtx.UsersModel.Insert(l.ctx, userEntity)
 	if err != nil {
 		return nil, err
 	}
@@ -75,6 +78,17 @@ func (l *RegisterLogic) Register(in *user.RegisterReq) (*user.RegisterResp, erro
 	token, err := ctxdata.GetJwtToken(l.svcCtx.Config.Jwt.AccessSecret, now, l.svcCtx.Config.Jwt.AccessExpire, userEntity.Id, userEntity.Name)
 	if err != nil {
 		return nil, err
+	}
+
+	//写入kafka消息，通知有新用户
+	pusher := kq.NewPusher(l.svcCtx.Config.KqPusherConf.Brokers, l.svcCtx.Config.KqPusherConf.Topic)
+	id, err := sqlres.LastInsertId()
+	if err != nil {
+		return nil, err
+	}
+	s := strconv.Itoa(int(id))
+	if err := pusher.Push(s); err != nil {
+		log.Fatal(err)
 	}
 
 	return &user.RegisterResp{
