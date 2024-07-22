@@ -2,6 +2,7 @@ package config
 
 import (
 	"github.com/zeromicro/go-queue/kq"
+	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/rest"
 	"github.com/zeromicro/go-zero/zrpc"
 )
@@ -31,8 +32,8 @@ type Config struct {
 			WriteBufferSize  int64
 		}
 	}
-	KqConf kq.KqConf
-
+	KqConf         kq.KqConf
+	log            logx.LogConf
 	UserRpcService zrpc.RpcClientConf
 
 	//redis

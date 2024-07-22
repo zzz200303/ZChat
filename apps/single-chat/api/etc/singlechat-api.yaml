@@ -12,6 +12,8 @@ Auth:
 
 Log:
   Encoding: plain
+  Mode: console
+  Level: debug
 
 Mysql:
   DataSource: root:wpzyyds@tcp(192.168.0.111:3306)/zchat?charset=utf8mb4
