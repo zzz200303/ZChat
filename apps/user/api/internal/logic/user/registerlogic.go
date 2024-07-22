@@ -36,7 +36,10 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 	}
 
 	var res types.RegisterResp
-	copier.Copy(&res, registerResp)
+	err = copier.Copy(&res, registerResp)
+	if err != nil {
+		return nil, err
+	}
 
 	return &res, nil
 }

@@ -6,6 +6,7 @@ import (
 	"ZChat/pkg/encrypt"
 	"context"
 	"database/sql"
+	"fmt"
 	"github.com/pkg/errors"
 	"time"
 
@@ -61,6 +62,8 @@ func (l *RegisterLogic) Register(in *user.RegisterReq) (*user.RegisterResp, erro
 			Valid:  true,
 		}
 	}
+
+	fmt.Println(userEntity)
 
 	_, err = l.svcCtx.UsersModel.Insert(l.ctx, userEntity)
 	if err != nil {
