@@ -132,7 +132,7 @@ services:
       - 9091:9091
       - 9443:9443
     networks:
-      - apisix
+      - z-chat
     volumes:
       - ./deploy/apisix/config.yaml:/usr/local/apisix/conf/config.yaml
       - ./apisix_log:/usr/local/apisix/logs
@@ -144,7 +144,7 @@ services:
     ports:
       - 9000:9000
     networks:
-      - apisix
+      - z-chat
     depends_on:
       - etcd
       - apisix
