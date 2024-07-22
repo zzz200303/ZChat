@@ -7,6 +7,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strconv"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -26,22 +27,35 @@ func NewRecordListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Record
 }
 
 func (l *RecordListLogic) RecordList(req *types.RecordListRequest) (resp *types.RecordListResponse, err error) {
-	pattern := fmt.Sprintf("%s:from:%d:to:%d:time:*", constants.OFFLINE_MESSAGE, req.FriendUid, req.Uid) // 生成Redis键
-	recodeList, err := l.svcCtx.Redis.KeysCtx(l.ctx, pattern)
+	pattern := fmt.Sprintf("%s:from:%d:to:%d", constants.OFFLINE_MESSAGE, req.FriendUid, req.Uid) // 生成Redis键
+	recodeJsonList, err := l.svcCtx.Redis.LrangeCtx(l.ctx, pattern, 0, -1)
 	if err != nil {
 		logx.Errorf("l.svcCtx.Redis.KeysCtx error: %v", err)
 		return nil, err
 	}
 	var messages []types.MessageInfo
 
-	for _, recodeJson := range recodeList {
-		m := types.MessageInfo{}
+	for _, recodeJson := range recodeJsonList {
+		mJson := types.MessageJson{}
 		fmt.Println(recodeJson)
-		err := json.Unmarshal([]byte(recodeJson), &m)
+		err := json.Unmarshal([]byte(recodeJson), &mJson)
 		if err != nil {
-			logx.Errorf("json.Unmarshal error: %v", err)
-			continue
+			fmt.Println(err)
+			return nil, err
 		}
+		m := types.MessageInfo{}
+		m.Content = mJson.Content
+		m.From, err = strconv.ParseInt(mJson.From, 10, 64)
+		if err != nil {
+			fmt.Println(err)
+			return nil, err
+		}
+		m.To, err = strconv.ParseInt(mJson.To, 10, 64)
+		if err != nil {
+			fmt.Println(err)
+			return nil, err
+		}
+		m.SendTime = mJson.SendTime
 		messages = append(messages, m)
 	}
 
