@@ -123,6 +123,35 @@ services:
     networks:
       z-chat:
 
+  apisix:
+    container_name: apisix
+    image: apache/apisix:3.6.0-debian
+    restart: always
+    ports:
+      - 9080:9080
+      - 9091:9091
+      - 9443:9443
+    networks:
+      - apisix
+    volumes:
+      - ./deploy/apisix/config.yaml:/usr/local/apisix/conf/config.yaml
+      - ./apisix_log:/usr/local/apisix/logs
+
+  dashboard:
+    container_name: dashboard
+    image: bitnami/apisix-dashboard
+    restart: always
+    ports:
+      - 9000:9000
+    networks:
+      - apisix
+    depends_on:
+      - etcd
+      - apisix
+    volumes:
+      - ./deploy/apisix-dashboard/config.yaml:/opt/bitnami/apisix-dashboard/conf/conf.yaml
+
+
 networks:
   z-chat:
     driver: bridge
