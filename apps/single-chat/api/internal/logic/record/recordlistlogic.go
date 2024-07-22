@@ -1,11 +1,12 @@
 package record
 
 import (
-	"context"
-	"github.com/zeromicro/go-zero/core/stores/sqlc"
-
 	"ZChat/apps/single-chat/api/internal/svc"
 	"ZChat/apps/single-chat/api/internal/types"
+	"ZChat/pkg/constants"
+	"context"
+	"encoding/json"
+	"fmt"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -25,19 +26,21 @@ func NewRecordListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Record
 }
 
 func (l *RecordListLogic) RecordList(req *types.RecordListRequest) (resp *types.RecordListResponse, err error) {
-	recodeList, err := l.svcCtx.RecodesModel.SelectRecordList(l.ctx, req.Uid, req.FriendUid)
-	if err != nil && err != sqlc.ErrNotFound {
+	pattern := fmt.Sprintf("%s:from:%d:to:%d:time:*", constants.OFFLINE_MESSAGE, req.FriendUid, req.Uid) // 生成Redis键
+	recodeList, err := l.svcCtx.Redis.KeysCtx(l.ctx, pattern)
+	if err != nil {
+		logx.Errorf("l.svcCtx.Redis.KeysCtx error: %v", err)
 		return nil, err
 	}
-
 	var messages []types.MessageInfo
 
-	for _, recode := range recodeList {
+	for _, recodeJson := range recodeList {
 		m := types.MessageInfo{}
-		m.Content = recode.Content
-		m.From = recode.From
-		m.To = recode.To
-		m.SendTime = recode.SendTime.String()
+		err := json.Unmarshal([]byte(recodeJson), &m)
+		if err != nil {
+			logx.Errorf("json.Unmarshal error: %v", err)
+			continue
+		}
 		messages = append(messages, m)
 	}
 
