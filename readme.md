@@ -8,4 +8,3 @@
 2. 削峰，聊天消息先送到Kafka再进行处理<br>
 3. 未来可以引入go-stash和elesticsearch作为日志存储和聊天记录搜索<br>
 使用Redis作为缓存，使用MySQL作为数据库<br>
-作者：王品泽
