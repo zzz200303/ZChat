@@ -97,7 +97,7 @@ services:
       KAFKA_BROKER_ID: 0
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_CREATE_TOPICS: "ws2ms_chat:8:1,ms2ps_chat:8:1,msg_to_mongo:8:1"
-      KAFKA_ADVERTISED_LISTENERS: INSIDE://192.168.0.111:9092
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://192.168.0.102:9092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT"
       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
       KAFKA_LISTENERS: INSIDE://:9092
@@ -125,7 +125,7 @@ services:
 
   apisix:
     container_name: apisix
-    image: apache/apisix:3.6.0-debian
+    image: apache/apisix
     restart: always
     ports:
       - 9080:9080
