@@ -6,5 +6,5 @@
 使用Kafka消息队列，作用：<br>
 1. 新用户注册的时候通知聊天系统初始化新用户<br>
 2. 削峰，聊天消息先送到Kafka再进行处理<br>
-3. 未来可以引入go-stash和elesticsearch实现聊天记录搜索<br>
+3. 未来可以引入go-stash和elasticsearch实现聊天记录搜索<br>
 使用Redis作为缓存，使用MySQL作为数据库<br>
