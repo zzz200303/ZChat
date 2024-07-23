@@ -57,18 +57,19 @@
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements. ...
 
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements. ...
+
 apisix:
-  enable_http2: true  # 将enable_http2设置在APISIX级别
+  enable_http2: true  # 在APISIX级别启用HTTP/2
   ssl:
-    enable: true
+    enable: true  # 启用SSL
     listen:  # APISIX监听HTTPS流量的端口
       - port: 9443
-        # enable_http2: true  # 这行不再需要，因为我们已经在APISIX级别启用了HTTP/2
-        # 其他端口配置可以保留或根据需要添加
-        # - ip: 127.0.0.3
-        #   port: 9445
-        #   enable_http2: true
-    ssl_protocols: TLSv1.2 TLSv1.3  # 支持的TLS版本
+        ssl_protocols: TLSv1.2 TLSv1.3  # 支持的TLS版本
+  http:  # 监听HTTP流量的配置
+    listen:  # APISIX监听HTTP流量的端口
+      - port: 9080
 
 deployment:
   role: traditional
@@ -77,6 +78,8 @@ deployment:
   etcd:
     host:
       - http://etcd:2379
+  security:
+    content_security_policy: "frame-src *;"
   admin:
     admin_key:
       - name: admin
