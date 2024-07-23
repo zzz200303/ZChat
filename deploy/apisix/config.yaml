@@ -52,18 +52,24 @@
 #
 # This will find environment variable `ETCD_HOST` first, and if it's not exist it will use `localhost` as default value.
 #
+
+
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements. ...
+
 apisix:
+  enable_http2: true  # 将enable_http2设置在APISIX级别
   ssl:
     enable: true
-    listen:                                       # APISIX listening port for HTTPS traffic.
+    listen:  # APISIX监听HTTPS流量的端口
       - port: 9443
-        enable_http2: true
-          # - ip: 127.0.0.3                           # If not set, default to `0.0.0.0`.
-          #   port: 9445
-          #   enable_http2: true
-          # ssl_trusted_certificate: /path/to/ca-cert   # Set the path to CA certificates used to verify client
-        # certificates in the PEM format.
-    ssl_protocols: TLSv1.2 TLSv1.3                # TLS versions supported.
+        # enable_http2: true  # 这行不再需要，因为我们已经在APISIX级别启用了HTTP/2
+        # 其他端口配置可以保留或根据需要添加
+        # - ip: 127.0.0.3
+        #   port: 9445
+        #   enable_http2: true
+    ssl_protocols: TLSv1.2 TLSv1.3  # 支持的TLS版本
+
 deployment:
   role: traditional
   role_traditional:
@@ -74,5 +80,5 @@ deployment:
   admin:
     admin_key:
       - name: admin
-        key: edd1c9f034335f136f87ad84b625c8f1  # using fixed API token has security risk, please update it when you deploy to production environment
+        key: edd1c9f034335f136f87ad84b625c8f1  # 使用固定API令牌存在安全风险，请在生产环境中更新
         role: admin
