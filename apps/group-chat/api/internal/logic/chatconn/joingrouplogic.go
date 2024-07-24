@@ -39,6 +39,6 @@ func (l *JoinGroupLogic) JoinGroup(req *types.JoinGroupRequest) (resp *types.Joi
 	if err != nil {
 		return nil, err
 	}
-	resp.Response = fmt.Sprintf("进群成功 %d")
+	resp.Response = fmt.Sprintf("进群成功")
 	return resp, nil
 }
