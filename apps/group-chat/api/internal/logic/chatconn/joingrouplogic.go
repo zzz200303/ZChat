@@ -32,13 +32,13 @@ func (l *JoinGroupLogic) JoinGroup(req *types.JoinGroupRequest) (resp *types.Joi
 		fmt.Println("json.Number换出了问题")
 		return
 	}
-	id, err := l.svcCtx.GmemberModel.Insert(l.ctx, &model.Gmember{
+	_, err = l.svcCtx.GmemberModel.Insert(l.ctx, &model.Gmember{
 		Gid: req.GroupId,
 		Uid: uid,
 	})
 	if err != nil {
 		return nil, err
 	}
-	resp.Response = fmt.Sprintf("进群成功 %d", id)
+	resp.Response = fmt.Sprintf("进群成功 %d")
 	return resp, nil
 }

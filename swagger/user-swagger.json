@@ -1,0 +1,333 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "",
+    "version": ""
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/user/alluser": {
+      "get": {
+        "summary": "获取所有用户",
+        "operationId": "alluser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/Response"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/AllUserResp"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "tags": [
+          "user\\user"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/user/login": {
+      "post": {
+        "summary": "用户登入",
+        "operationId": "login",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/Response"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/LoginResp"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "定义登录接口的请求体",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LoginReq"
+            }
+          }
+        ],
+        "tags": [
+          "user\\user"
+        ]
+      }
+    },
+    "/user/register": {
+      "post": {
+        "summary": "用户注册",
+        "operationId": "register",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/Response"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/RegisterResp"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "定义注册接口的请求体",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RegisterReq"
+            }
+          }
+        ],
+        "tags": [
+          "user\\user"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "AllUserReq": {
+      "type": "object",
+      "properties": {},
+      "title": "AllUserReq"
+    },
+    "AllUserResp": {
+      "type": "object",
+      "properties": {
+        "users": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserEntity"
+          }
+        }
+      },
+      "title": "AllUserResp",
+      "required": [
+        "users"
+      ]
+    },
+    "FindFriendReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "将 Id 类型改为 int64"
+        }
+      },
+      "title": "FindFriendReq",
+      "required": [
+        "id"
+      ]
+    },
+    "FindFriendResp": {
+      "type": "object",
+      "properties": {
+        "users": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserEntity"
+          }
+        }
+      },
+      "title": "FindFriendResp",
+      "required": [
+        "users"
+      ]
+    },
+    "FindUserReq": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "将 Id 类型改为 int64"
+        }
+      },
+      "title": "FindUserReq",
+      "required": [
+        "name",
+        "id"
+      ]
+    },
+    "FindUserResp": {
+      "type": "object",
+      "properties": {
+        "users": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserEntity"
+          }
+        }
+      },
+      "title": "FindUserResp",
+      "required": [
+        "users"
+      ]
+    },
+    "LoginReq": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "title": "LoginReq",
+      "required": [
+        "name",
+        "password"
+      ]
+    },
+    "LoginResp": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        },
+        "expire": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "LoginResp",
+      "required": [
+        "token",
+        "expire"
+      ]
+    },
+    "RegisterReq": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "title": "RegisterReq",
+      "required": [
+        "name",
+        "password"
+      ]
+    },
+    "RegisterResp": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        },
+        "expire": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "RegisterResp",
+      "required": [
+        "token",
+        "expire"
+      ]
+    },
+    "Response": {
+      "type": "object",
+      "properties": {
+        "trace_id": {
+          "type": "string",
+          "description": "链路追踪id",
+          "example": "a1b2c3d4e5f6g7h8"
+        },
+        "code": {
+          "type": "integer",
+          "description": "状态码",
+          "example": 0
+        },
+        "msg": {
+          "type": "string",
+          "description": "消息",
+          "example": "ok"
+        },
+        "data": {
+          "type": "object",
+          "description": "数据"
+        }
+      }
+    },
+    "UserEntity": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "将 Id 类型改为 int64"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "UserEntity",
+      "required": [
+        "id",
+        "name"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}

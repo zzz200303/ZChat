@@ -1,0 +1,192 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "",
+    "version": ""
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/singlechat/chatconn": {
+      "get": {
+        "operationId": "ChatConn",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/Response"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {}
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "tags": [
+          "singlechat-api\\chatconn"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/singlechat/recordlist": {
+      "get": {
+        "operationId": "recordList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/Response"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/recordListResponse"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "uid",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "frienduid",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "singlechat-api\\record"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "MessageInfo": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "string"
+        },
+        "from": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "to": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "send_time": {
+          "type": "string"
+        }
+      },
+      "title": "MessageInfo",
+      "required": [
+        "content",
+        "from",
+        "to",
+        "send_time"
+      ]
+    },
+    "Response": {
+      "type": "object",
+      "properties": {
+        "trace_id": {
+          "type": "string",
+          "description": "链路追踪id",
+          "example": "a1b2c3d4e5f6g7h8"
+        },
+        "code": {
+          "type": "integer",
+          "description": "状态码",
+          "example": 0
+        },
+        "msg": {
+          "type": "string",
+          "description": "消息",
+          "example": "ok"
+        },
+        "data": {
+          "type": "object",
+          "description": "数据"
+        }
+      }
+    },
+    "recordListRequest": {
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "frienduid": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "recordListRequest",
+      "required": [
+        "uid",
+        "frienduid"
+      ]
+    },
+    "recordListResponse": {
+      "type": "object",
+      "properties": {
+        "recodelist": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MessageInfo"
+          }
+        }
+      },
+      "title": "recordListResponse",
+      "required": [
+        "recodelist"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}

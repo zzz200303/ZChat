@@ -1,0 +1,353 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "",
+    "version": ""
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/groupchat/chatconn": {
+      "get": {
+        "operationId": "ChatConn",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/Response"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {}
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "tags": [
+          "groupchat-api\\chatconn"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/groupchat/getallgroupbyuserid": {
+      "get": {
+        "operationId": "GetAllGroupByUserId",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/Response"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/GetAllGroupByUserIdResponse"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "tags": [
+          "groupchat-api\\chatconn"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/groupchat/join/{groupid}": {
+      "get": {
+        "operationId": "JoinGroup",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/Response"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/JoinGroupResponse"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "groupid",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "groupchat-api\\chatconn"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/groupchat/quitgroup": {
+      "get": {
+        "operationId": "QuitGroup",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/Response"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/QuitGroupResponse"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "tags": [
+          "groupchat-api\\chatconn"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/groupchat/recordlist/{groupid}": {
+      "get": {
+        "operationId": "recordList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/Response"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/recordListResponse"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "groupid",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "groupchat-api\\record"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "GetAllGroupByUserIdRequest": {
+      "type": "object",
+      "properties": {},
+      "title": "GetAllGroupByUserIdRequest"
+    },
+    "GetAllGroupByUserIdResponse": {
+      "type": "object",
+      "properties": {
+        "groups": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "title": "GetAllGroupByUserIdResponse",
+      "required": [
+        "groups"
+      ]
+    },
+    "JoinGroupRequest": {
+      "type": "object",
+      "properties": {},
+      "title": "JoinGroupRequest"
+    },
+    "JoinGroupResponse": {
+      "type": "object",
+      "properties": {
+        "response": {
+          "type": "string"
+        }
+      },
+      "title": "JoinGroupResponse",
+      "required": [
+        "response"
+      ]
+    },
+    "MessageInfo": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "string"
+        },
+        "from": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "to": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "type": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "send_time": {
+          "type": "string"
+        }
+      },
+      "title": "MessageInfo",
+      "required": [
+        "content",
+        "from",
+        "to",
+        "type",
+        "send_time"
+      ]
+    },
+    "QuitGroupRequest": {
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "gid": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "QuitGroupRequest",
+      "required": [
+        "uid",
+        "gid"
+      ]
+    },
+    "QuitGroupResponse": {
+      "type": "object",
+      "properties": {
+        "response": {
+          "type": "string"
+        }
+      },
+      "title": "QuitGroupResponse",
+      "required": [
+        "response"
+      ]
+    },
+    "Response": {
+      "type": "object",
+      "properties": {
+        "trace_id": {
+          "type": "string",
+          "description": "链路追踪id",
+          "example": "a1b2c3d4e5f6g7h8"
+        },
+        "code": {
+          "type": "integer",
+          "description": "状态码",
+          "example": 0
+        },
+        "msg": {
+          "type": "string",
+          "description": "消息",
+          "example": "ok"
+        },
+        "data": {
+          "type": "object",
+          "description": "数据"
+        }
+      }
+    },
+    "recordListRequest": {
+      "type": "object",
+      "properties": {},
+      "title": "recordListRequest"
+    },
+    "recordListResponse": {
+      "type": "object",
+      "properties": {
+        "recodelist": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MessageInfo"
+          }
+        }
+      },
+      "title": "recordListResponse",
+      "required": [
+        "recodelist"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}
