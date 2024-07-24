@@ -59,15 +59,18 @@ func dispatch(value string, svcCtx *svc.ServiceContext) error {
 
 // sendUserMessage 按照群聊号发送给所有群晕
 func sendGroupMessage(message types.MessageInfo, svcCtx *svc.ServiceContext) {
-	userList, err := svcCtx.GmemberModel.FindAllUserByGroupId(context.Background(), message.To)
+	userListSql, err := svcCtx.GmemberModel.FindAllUserByGroupId(context.Background(), message.To)
 	if err != nil {
 		logx.Errorf("查询群聊用户异常")
 		return
 	}
-	fmt.Println(userList)
+	var userList []int64
+	for _, v := range userListSql {
+		userList = append(userList, v.Uid)
+	}
 	for _, u := range userList {
-		fmt.Printf("给用户%d发消息\n", u.Uid)
-		node, ok := usersMap[u.Uid] // 从用户映射中获取目标用户节点
+		fmt.Printf("给用户%d发消息\n", u)
+		node, ok := usersMap[u] // 从用户映射中获取目标用户节点
 		// 序列化 MessageInfo 结构体到 JSON 字符串
 		jsonData, err := json.Marshal(message)
 		if err != nil {
@@ -80,8 +83,8 @@ func sendGroupMessage(message types.MessageInfo, svcCtx *svc.ServiceContext) {
 		}
 		if node.WsConn == (*websocket.Conn)(nil) {
 			// 用户不在线，将消息存储到Redis
-			key := fmt.Sprintf("%s:group:%d:to:%d", constants.GroupChatMsg, message.To, u.Uid) // 生成Redis键
-			_, err := node.SvcCtx.Redis.Lpush(key, string(jsonData))                           // 将消息推送到Redis列表中
+			key := fmt.Sprintf("%s:group:%d:to:%d", constants.GroupChatMsg, message.To, u) // 生成Redis键
+			_, err := node.SvcCtx.Redis.Lpush(key, string(jsonData))                       // 将消息推送到Redis列表中
 			if err != nil {
 				fmt.Println("Lpush错误")
 				logx.Error(err) // 如果存储发生错误，记录错误日志
