@@ -44,6 +44,44 @@ services:
     networks:
       z-chat:
 
+
+
+  zookeeper:
+    image: bitnami/zookeeper
+    ports:
+      - 2181:2181
+    container_name: zookeeper
+    volumes:
+      - /etc/localtime:/etc/localtime
+    environment:
+      - TZ=Asia/Shanghai
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    restart: always
+    networks:
+      z-chat:
+
+  kafka:
+    image: bitnami/kafka
+    container_name: kafka
+    restart: always
+    ports:
+      - 9092:9092
+    environment:
+      TZ: Asia/Shanghai
+      KAFKA_BROKER_ID: 0
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: "ws2ms_chat:8:1,ms2ps_chat:8:1,msg_to_mongo:8:1"
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://192.168.0.103:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT"
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_LISTENERS: INSIDE://:9092
+      KAFKA_HEAP_OPTS: "-Xmx512M -Xms256M"
+    depends_on:
+      - zookeeper
+    networks:
+      z-chat:
+
+
   user-rpc:
     build:
       context: .
@@ -72,41 +110,6 @@ services:
     networks:
       z-chat:
 
-  zookeeper:
-    image: bitnami/zookeeper
-    ports:
-      - 2181:2181
-    container_name: zookeeper
-    volumes:
-      - /etc/localtime:/etc/localtime
-    environment:
-      - TZ=Asia/Shanghai
-      - ALLOW_ANONYMOUS_LOGIN=yes
-    restart: always
-    networks:
-      z-chat:
-
-  kafka:
-    image: bitnami/kafka
-    container_name: kafka
-    restart: always
-    ports:
-      - 9092:9092
-    environment:
-      TZ: Asia/Shanghai
-      KAFKA_BROKER_ID: 0
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_CREATE_TOPICS: "ws2ms_chat:8:1,ms2ps_chat:8:1,msg_to_mongo:8:1"
-      KAFKA_ADVERTISED_LISTENERS: INSIDE://192.168.0.102:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT"
-      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
-      KAFKA_LISTENERS: INSIDE://:9092
-      KAFKA_HEAP_OPTS: "-Xmx512M -Xms256M"
-    depends_on:
-      - zookeeper
-    networks:
-      z-chat:
-        
   singlechat-api:
     build:
       context: .
