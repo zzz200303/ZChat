@@ -35,8 +35,9 @@ func (l *GetAllGroupByUserIdLogic) GetAllGroupByUserId(req *types.GetAllGroupByU
 	if err != nil {
 		return nil, err
 	}
+	res := new(types.GetAllGroupByUserIdResponse)
 	for _, v := range gm {
-		resp.Groups = append(resp.Groups, v.Gid)
+		res.Groups = append(res.Groups, v.Gid)
 	}
-	return resp, nil
+	return res, nil
 }
