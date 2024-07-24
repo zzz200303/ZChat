@@ -25,15 +25,23 @@ func NewRecordListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Record
 }
 
 func (l *RecordListLogic) RecordList(req *types.RecordListRequest) (resp *types.RecordListResponse, err error) {
-	pattern := fmt.Sprintf("%s:from:%d:to:%d", constants.SingleChatMsg, req.FriendUid, req.Uid) // 生成Redis键
-	recodeJsonList, err := l.svcCtx.Redis.LrangeCtx(l.ctx, pattern, 0, -1)
+	pattern1 := fmt.Sprintf("%s:from:%d:to:%d", constants.SingleChatMsg, req.FriendUid, req.Uid) // 生成Redis键
+	recodeJsonList1, err := l.svcCtx.Redis.LrangeCtx(l.ctx, pattern1, 0, -1)
+	pattern2 := fmt.Sprintf("%s:from:%d:to:%d", constants.SingleChatMsg, req.Uid, req.FriendUid) // 生成Redis键
+	recodeJsonList2, err := l.svcCtx.Redis.LrangeCtx(l.ctx, pattern2, 0, -1)
+	var combinedList []string
+	// 追加第一个列表的所有元素到新切片
+	combinedList = append(combinedList, recodeJsonList1...)
+	combinedList = append(combinedList, recodeJsonList2...)
+
 	if err != nil {
 		logx.Errorf("l.svcCtx.Redis.KeysCtx error: %v", err)
 		return nil, err
 	}
+
 	var messages []types.MessageInfo
 
-	for _, recodeJson := range recodeJsonList {
+	for _, recodeJson := range combinedList {
 		m := types.MessageInfo{}
 		fmt.Println(recodeJson)
 		err := json.Unmarshal([]byte(recodeJson), &m)
