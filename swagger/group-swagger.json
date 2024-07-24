@@ -79,6 +79,48 @@
         ]
       }
     },
+    "/groupchat/getalluserbygroupid/{groupid}": {
+      "get": {
+        "operationId": "GetAllUserByGroupId",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/Response"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/GetAllUserByGroupIdResponse"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "groupid",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "groupchat-api\\chatconn"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
     "/groupchat/join/{groupid}": {
       "get": {
         "operationId": "JoinGroup",
@@ -217,6 +259,27 @@
       "title": "GetAllGroupByUserIdResponse",
       "required": [
         "groups"
+      ]
+    },
+    "GetAllUserByGroupIdRequest": {
+      "type": "object",
+      "properties": {},
+      "title": "GetAllUserByGroupIdRequest"
+    },
+    "GetAllUserByGroupIdResponse": {
+      "type": "object",
+      "properties": {
+        "users": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "title": "GetAllUserByGroupIdResponse",
+      "required": [
+        "users"
       ]
     },
     "JoinGroupRequest": {
