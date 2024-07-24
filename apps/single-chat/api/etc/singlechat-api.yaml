@@ -41,7 +41,7 @@ NewUserKqConf:
   Name: newuser-mq
   Brokers:
     - 192.168.0.103:9092
-  Group: newuser-group
+  Group: newuser-singlechat-group
   Topic: newuser
   Offset: last
   Consumers: 1
