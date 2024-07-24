@@ -32,7 +32,7 @@ func (l *RecordListLogic) RecordList(req *types.RecordListRequest) (resp *types.
 		fmt.Println("json.Number换出了问题")
 		return
 	}
-	pattern := fmt.Sprintf("%s:from:*:group:%d:to:%d", constants.GroupChatMsg, req.GroupId, uid) // 生成Redis键
+	pattern := fmt.Sprintf("%s:group:%d:to:%d", constants.GroupChatMsg, req.GroupId, uid) // 生成Redis键
 	recodeJsonList, err := l.svcCtx.Redis.LrangeCtx(l.ctx, pattern, 0, -1)
 	if err != nil {
 		logx.Errorf("l.svcCtx.Redis.KeysCtx error: %v", err)

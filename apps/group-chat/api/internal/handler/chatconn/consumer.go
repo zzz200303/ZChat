@@ -76,8 +76,8 @@ func sendGroupMessage(message types.MessageInfo, svcCtx *svc.ServiceContext) {
 		}
 		if node.WsConn == (*websocket.Conn)(nil) {
 			// 用户不在线，将消息存储到Redis
-			key := fmt.Sprintf("%s:from:%d:group:%d:to:%d", constants.GroupChatMsg, message.From, message.To, u.Uid) // 生成Redis键
-			_, err := node.SvcCtx.Redis.Lpush(key, string(jsonData))                                                 // 将消息推送到Redis列表中
+			key := fmt.Sprintf("%s:group:%d:to:%d", constants.GroupChatMsg, message.To, u.Uid) // 生成Redis键
+			_, err := node.SvcCtx.Redis.Lpush(key, string(jsonData))                           // 将消息推送到Redis列表中
 			if err != nil {
 				fmt.Println("Lpush错误")
 				logx.Error(err) // 如果存储发生错误，记录错误日志
