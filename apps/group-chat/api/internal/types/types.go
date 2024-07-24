@@ -8,6 +8,14 @@ type GetAllGroupByUserIdResponse struct {
 	Groups []int64 `json:"groups"`
 }
 
+type GetAllUserByGroupIdRequest struct {
+	GroupId int64 `path:"groupid"`
+}
+
+type GetAllUserByGroupIdResponse struct {
+	Users []int64 `json:"users"`
+}
+
 type JoinGroupRequest struct {
 	GroupId int64 `path:"groupid"`
 }

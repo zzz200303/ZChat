@@ -26,6 +26,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 			{
 				Method:  http.MethodGet,
+				Path:    "/getalluserbygroupid/:groupid",
+				Handler: chatconn.GetAllUserByGroupIdHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
 				Path:    "/join/:groupid",
 				Handler: chatconn.JoinGroupHandler(serverCtx),
 			},

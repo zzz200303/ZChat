@@ -31,6 +31,12 @@ type (
 	QuitGroupResponse {
 		Response string `json:"response"`
 	}
+	GetAllUserByGroupIdRequest {
+		GroupId int64 `path:"groupid"`
+	}
+	GetAllUserByGroupIdResponse {
+		Users []int64 `json:"users"`
+	}
 )
 
 //webwocker连接
@@ -48,6 +54,9 @@ service groupchat-api {
 
 	@handler GetAllGroupByUserId
 	get /getallgroupbyuserid (GetAllGroupByUserIdRequest) returns (GetAllGroupByUserIdResponse)
+
+	@handler GetAllUserByGroupId
+	get /getalluserbygroupid/:groupid (GetAllUserByGroupIdRequest) returns (GetAllUserByGroupIdResponse)
 
 	@handler QuitGroup
 	get /quitgroup (QuitGroupRequest) returns (QuitGroupResponse)
