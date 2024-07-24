@@ -26,7 +26,7 @@ func TestJson(t *testing.T) {
 	}
 	fmt.Println("jsonData:" + string(jsonData))
 	var messageJson MessageInfo
-	//key := fmt.Sprintf("%s::%d", constants.OFFLINE_MESSAGE, message.To) // 生成Redis键
+	//key := fmt.Sprintf("%s::%d", constants.SingleChat, message.To) // 生成Redis键
 	err = json.Unmarshal(jsonData, &messageJson) // 将JSON字符串解析为Message对象
 	fmt.Println(messageJson)
 	if err != nil {

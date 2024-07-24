@@ -1,19 +1,19 @@
 package chatconn
 
 import (
-	"ZChat/apps/single-chat/api/internal/svc"
-	"ZChat/apps/single-chat/api/internal/types"
+	"ZChat/apps/group-chat/api/internal/svc"
+	"ZChat/apps/group-chat/api/internal/types"
 	"ZChat/apps/user/rpc/pb/user"
 	"ZChat/pkg/constants"
 	utils "ZChat/pkg/pool"
 	"ZChat/pkg/response"
-	"context"                                // 导入上下文包，用于处理超时和取消操作
-	"encoding/json"                          // 导入JSON编码解码包
-	"fmt"                                    // 导入格式化IO包
-	"github.com/gorilla/websocket"           // 导入WebSocket包
-	"github.com/zeromicro/go-zero/core/logx" // 导入日志包
-	"net/http"                               // 导入HTTP包
-	"time"                                   // 导入时间包
+	"context"
+	"encoding/json"
+	"fmt"
+	"github.com/gorilla/websocket"
+	"github.com/zeromicro/go-zero/core/logx"
+	"net/http"
+	"time"
 )
 
 // UsersMap 存储在线用户的映射，键是用户ID，值是用户节点

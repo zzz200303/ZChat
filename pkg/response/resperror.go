@@ -1,10 +1,5 @@
 package response
 
-/*
-* @Author: chuang
-* @Date:   2023/1/10 14:01
- */
-
 type RespError struct {
 	Code    int    `json:"code"`
 	Message string `json:"config"`

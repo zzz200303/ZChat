@@ -5,11 +5,6 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-/*
-* @Author: chuang
-* @Date:   2022/9/14 8:52
- */
-
 // Init InitPool 初始化routine pool
 
 var Pool *ants.Pool

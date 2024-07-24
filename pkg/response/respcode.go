@@ -1,9 +1,5 @@
 package response
 
-/*
-* @Author: chuang
-* @Date:   2023/1/10 14:01
- */
 const (
 	UNAUTHORIZED    = -105
 	SUCCESS         = 200

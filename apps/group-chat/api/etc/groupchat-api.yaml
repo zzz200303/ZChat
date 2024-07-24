@@ -1,6 +1,6 @@
-Name: singlechat-api
+Name: groupchat-api
 Host: 0.0.0.0
-Port: 10002
+Port: 10003
 
 JwtAuth:
   AccessSecret: jwtauthwpzyyds
@@ -28,12 +28,12 @@ Client:
     WriteBufferSize: 10240
 
 
-SingleMsgKqConf:
-  Name: singlechat-mq #定义服务的名称，会出现在 log 和 tracer 中
+GroupMsgKqConf:
+  Name: groupmsg-mq #定义服务的名称，会出现在 log 和 tracer 中
   Brokers:
     - 192.168.0.102:9092
-  Group: SingleMsg-group
-  Topic: SingleMsg
+  Group: GroupMsg-group
+  Topic: GroupMsg
   Offset: last
   Consumers: 1
 

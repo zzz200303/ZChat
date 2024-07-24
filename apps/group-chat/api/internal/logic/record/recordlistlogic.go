@@ -1,12 +1,13 @@
 package record
 
 import (
-	"ZChat/apps/single-chat/api/internal/svc"
-	"ZChat/apps/single-chat/api/internal/types"
+	"ZChat/apps/group-chat/api/internal/svc"
+	"ZChat/apps/group-chat/api/internal/types"
 	"ZChat/pkg/constants"
 	"context"
 	"encoding/json"
 	"fmt"
+
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -25,7 +26,13 @@ func NewRecordListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Record
 }
 
 func (l *RecordListLogic) RecordList(req *types.RecordListRequest) (resp *types.RecordListResponse, err error) {
-	pattern := fmt.Sprintf("%s:from:%d:to:%d", constants.SingleChatMsg, req.FriendUid, req.Uid) // 生成Redis键
+	uidJson := l.ctx.Value("uid").(json.Number) // 从jwt里面提取uid
+	uid, err := uidJson.Int64()
+	if err != nil {
+		fmt.Println("json.Number换出了问题")
+		return
+	}
+	pattern := fmt.Sprintf("%s:from:*:group:%d:to:%d", constants.GroupChatMsg, req.GroupId, uid) // 生成Redis键
 	recodeJsonList, err := l.svcCtx.Redis.LrangeCtx(l.ctx, pattern, 0, -1)
 	if err != nil {
 		logx.Errorf("l.svcCtx.Redis.KeysCtx error: %v", err)

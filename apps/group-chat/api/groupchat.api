@@ -1,0 +1,66 @@
+syntax = "v1"
+
+type (
+	MessageInfo {
+		Content  string `json:"content"`
+		From     int64  `json:"from"`
+		To       int64  `json:"to"`
+		Type     int64  `json:"type"`
+		SendTime string `json:"send_time"`
+	}
+	JoinGroupRequest {
+		GroupId int64 `path:"groupid"`
+	}
+	JoinGroupResponse {
+		Response string `json:"response"`
+	}
+	GetAllGroupByUserIdRequest  {}
+	GetAllGroupByUserIdResponse {
+		Groups []int64 `json:"groups"`
+	}
+	recordListRequest {
+		GroupId int64 `path:"groupid"`
+	}
+	recordListResponse {
+		RecordList []MessageInfo `json:"recodelist"`
+	}
+	QuitGroupRequest {
+		Uid int64 `json:"uid"`
+		Gid int64 `json:"gid"`
+	}
+	QuitGroupResponse {
+		Response string `json:"response"`
+	}
+)
+
+//webwocker连接
+@server (
+	group:  chatconn
+	prefix: /groupchat
+	jwt:    JwtAuth
+)
+service groupchat-api {
+	@handler ChatConn
+	get /chatconn
+
+	@handler JoinGroup
+	get /join/:groupid (JoinGroupRequest) returns (JoinGroupResponse)
+
+	@handler GetAllGroupByUserId
+	get /getallgroupbyuserid (GetAllGroupByUserIdRequest) returns (GetAllGroupByUserIdResponse)
+
+	@handler QuitGroup
+	get /quitgroup (QuitGroupRequest) returns (QuitGroupResponse)
+}
+
+@server (
+	group:  record
+	prefix: /groupchat
+	jwt:    JwtAuth
+)
+service groupchat-api {
+	//获取某个群聊的消息
+	@handler recordList
+	get /recordlist/:groupid (recordListRequest) returns (recordListResponse)
+}
+

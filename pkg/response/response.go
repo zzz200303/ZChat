@@ -5,11 +5,6 @@ import (
 	"net/http"
 )
 
-/*
-* @Author: chuang
-* @Date:   2023/1/11 11:10
- */
-
 type R struct {
 	Code    int         `json:"code"`
 	Message string      `json:"config"`

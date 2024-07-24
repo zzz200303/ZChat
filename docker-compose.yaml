@@ -123,6 +123,22 @@ services:
     networks:
       z-chat:
 
+  groupchat-api:
+    build:
+      context: .
+      dockerfile: apps/group-chat/api/Dockerfile
+    image: groupchat-api-image
+    ports:
+      - "10003:10003"
+    depends_on:
+      - mysql
+      - etcd
+      - redis
+      - zookeeper
+      - kafka
+    networks:
+      z-chat:
+
   apisix:
     container_name: apisix
     image: apache/apisix
@@ -166,6 +182,32 @@ services:
     networks:
       z-chat:
 
+#  elasticsearch:
+#    image: elasticsearch # 选择合适的 Elasticsearch 版本
+#    container_name: elasticsearch
+#    environment:
+#      - discovery.type=single-node  # 单节点模式，适用于开发和测试
+#      - ES_JAVA_OPTS=-Xms512m -Xmx512m  # 可以根据需要调整 JVM 内存选项
+#    ports:
+#      - "9200:9200"  # Elasticsearch 服务端口，默认为 9200
+#      - "9300:9300"  # Elasticsearch 节点间通信端口
+#    volumes:
+#      - ./deploy/elasticsearch-data:/usr/share/elasticsearch/data  # 数据持久化存储
+#    networks:
+#      - z-chat
+#
+#  kibana:
+#    image: kibana  # 选择与 Elasticsearch 兼容的 Kibana 版本
+#    container_name: kibana
+#    ports:
+#      - "5601:5601"  # Kibana Web 界面端口，默认为 5601
+#    environment:
+#      - SERVER_HOST=0.0.0.0  # Kibana 监听的主机
+#      - ELASTICSEARCH_HOSTS= http://elasticsearch:9200  # Elasticsearch 服务地址
+#    depends_on:
+#      - elasticsearch
+#    networks:
+#      - z-chat
 
 networks:
   z-chat:

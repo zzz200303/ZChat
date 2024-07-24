@@ -1,12 +1,13 @@
 package chatconn
 
 import (
-	"ZChat/apps/single-chat/api/internal/svc"
-	"ZChat/apps/single-chat/api/internal/types"
+	"ZChat/apps/group-chat/api/internal/svc"
+	"ZChat/apps/group-chat/api/internal/types"
 	"ZChat/pkg/constants"
-	"encoding/json"                          // 导入JSON编码/解码包
-	"fmt"                                    // 导入格式化包
-	"github.com/gorilla/websocket"           // 导入WebSocket包
+	"context"
+	"encoding/json" // 导入JSON编码/解码包
+	"fmt"           // 导入格式化包
+	"github.com/gorilla/websocket"
 	"github.com/zeromicro/go-queue/kq"       // 导入Kafka队列包
 	"github.com/zeromicro/go-zero/core/logx" // 导入日志包
 	"strconv"
@@ -15,10 +16,10 @@ import (
 // StartMq 启动消息队列消费
 func StartMq(svcCtx *svc.ServiceContext) {
 	// 创建Kafka队列
-	q := kq.MustNewQueue(svcCtx.Config.SingleMsgKqConf, kq.WithHandle( //kafka接收到消息后的处理函数
+	q := kq.MustNewQueue(svcCtx.Config.GroupMsgKqConf, kq.WithHandle( //kafka接收到消息后的处理函数
 		func(k, v string) error {
 			logx.Info("kafka消费消息.......") // 记录日志，表示正在消费Kafka消息
-			err := dispatch(v)            // 调用dispatch处理消息
+			err := dispatch(v, svcCtx)    // 调用dispatch处理消息
 			if err != nil {
 				return err // 如果处理消息时发生错误，返回错误
 			}
@@ -29,7 +30,7 @@ func StartMq(svcCtx *svc.ServiceContext) {
 }
 
 // dispatch 处理Kafka的消息，分类消费
-func dispatch(value string) error {
+func dispatch(value string, svcCtx *svc.ServiceContext) error {
 	var messageJson types.MessageJson                  // 创建一个Message对象
 	err := json.Unmarshal([]byte(value), &messageJson) // 将JSON字符串解析为Message对象
 	if err != nil {
@@ -48,35 +49,44 @@ func dispatch(value string) error {
 	if err != nil {
 		return err // 返回错误
 	}
-	sendUserMessage(message) // 处理用户消息
-	return nil               // 处理成功，返回nil
+	sendGroupMessage(message, svcCtx) // 处理用户消息
+	return nil                        // 处理成功，返回nil
 }
 
-// sendUserMessage 按照To发送给指定用户
-func sendUserMessage(message types.MessageInfo) {
-	node, ok := usersMap[message.To] // 从用户映射中获取目标用户节点
-	// 序列化 MessageInfo 结构体到 JSON 字符串
-	jsonData, err := json.Marshal(message)
+// sendUserMessage 按照群聊号发送给所有群晕
+func sendGroupMessage(message types.MessageInfo, svcCtx *svc.ServiceContext) {
+	userList, err := svcCtx.GmemberModel.FindAllUserByGroupId(context.Background(), message.To)
 	if err != nil {
-		// 处理序列化错误
-		fmt.Printf("序列化错误: %v", err)
+		logx.Errorf("查询群聊用户异常")
 		return
 	}
-	if !ok {
-		return // 如果用户不在线，直接返回
-	}
-	if node.WsConn == (*websocket.Conn)(nil) {
-		// 用户不在线，将消息存储到Redis
-		key := fmt.Sprintf("%s:from:%d:to:%d", constants.SingleChatMsg, message.From, message.To) // 生成Redis键
-		_, err := node.SvcCtx.Redis.Lpush(key, string(jsonData))                                  // 将消息推送到Redis列表中
+
+	for _, u := range userList {
+
+		node, ok := usersMap[u.Uid] // 从用户映射中获取目标用户节点
+		// 序列化 MessageInfo 结构体到 JSON 字符串
+		jsonData, err := json.Marshal(message)
 		if err != nil {
-			fmt.Println("Lpush错误")
-			logx.Error(err) // 如果存储发生错误，记录错误日志
+			// 处理序列化错误
+			fmt.Printf("序列化错误: %v", err)
+			return
 		}
-		return // 返回
+		if !ok {
+			return // 如果用户不在线，直接返回
+		}
+		if node.WsConn == (*websocket.Conn)(nil) {
+			// 用户不在线，将消息存储到Redis
+			key := fmt.Sprintf("%s:from:%d:group:%d:to:%d", constants.GroupChatMsg, message.From, message.To, u.Uid) // 生成Redis键
+			_, err := node.SvcCtx.Redis.Lpush(key, string(jsonData))                                                 // 将消息推送到Redis列表中
+			if err != nil {
+				fmt.Println("Lpush错误")
+				logx.Error(err) // 如果存储发生错误，记录错误日志
+			}
+			return // 返回
+		}
+		// 如果用户在线，将消息发送到在线消息通道，不用redis
+		node.CacheOnlineMessage <- message
 	}
-	// 如果用户在线，将消息发送到在线消息通道，不用redis
-	node.CacheOnlineMessage <- message
 }
 
 // StartNewUserMq 启动新用户消息队列消费

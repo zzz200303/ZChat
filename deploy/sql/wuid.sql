@@ -4,3 +4,4 @@ CREATE TABLE `wuid` (
     PRIMARY KEY (`x`),
     UNIQUE KEY `h` (`h`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
+

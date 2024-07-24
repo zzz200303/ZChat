@@ -5,13 +5,15 @@ type MessageInfo struct {
 	Content  string `json:"content"`
 	From     int64  `json:"from"`
 	To       int64  `json:"to"`
+	Type     int64  `json:"type"` //群消息还是用户消息
 	SendTime string `json:"send_time"`
 }
 
 type MessageJson struct {
 	Content  string `json:"content"`
-	From     string  `json:"from"`
-	To       string  `json:"to"`
+	From     string `json:"from"`
+	To       string `json:"to"`
+	Type     string `json:"type"` //群消息还是用户消息
 	SendTime string `json:"send_time"`
 }
 

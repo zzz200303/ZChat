@@ -32,10 +32,10 @@ type Config struct {
 			WriteBufferSize  int64
 		}
 	}
-	SingleMsgKqConf kq.KqConf
-	log             logx.LogConf
-	UserRpcService  zrpc.RpcClientConf
-	NewUserKqConf   kq.KqConf
+	GroupMsgKqConf kq.KqConf
+	log            logx.LogConf
+	UserRpcService zrpc.RpcClientConf
+	NewUserKqConf  kq.KqConf
 
 	//redis
 	Redis struct {
