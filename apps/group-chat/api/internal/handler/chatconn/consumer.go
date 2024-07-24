@@ -49,6 +49,10 @@ func dispatch(value string, svcCtx *svc.ServiceContext) error {
 	if err != nil {
 		return err // 返回错误
 	}
+	message.Type, err = strconv.ParseInt(messageJson.Type, 10, 64)
+	if err != nil {
+		return err // 返回错误
+	}
 	sendGroupMessage(message, svcCtx) // 处理用户消息
 	return nil                        // 处理成功，返回nil
 }
@@ -60,9 +64,9 @@ func sendGroupMessage(message types.MessageInfo, svcCtx *svc.ServiceContext) {
 		logx.Errorf("查询群聊用户异常")
 		return
 	}
-
+	fmt.Println(userList)
 	for _, u := range userList {
-
+		fmt.Printf("给用户%d发消息\n", u.Uid)
 		node, ok := usersMap[u.Uid] // 从用户映射中获取目标用户节点
 		// 序列化 MessageInfo 结构体到 JSON 字符串
 		jsonData, err := json.Marshal(message)

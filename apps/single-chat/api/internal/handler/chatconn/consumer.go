@@ -48,6 +48,10 @@ func dispatch(value string) error {
 	if err != nil {
 		return err // 返回错误
 	}
+	message.Type, err = strconv.ParseInt(messageJson.Type, 10, 64)
+	if err != nil {
+		return err // 返回错误
+	}
 	sendUserMessage(message) // 处理用户消息
 	return nil               // 处理成功，返回nil
 }
