@@ -26,7 +26,7 @@ func NewQuitGroupLogic(ctx context.Context, svcCtx *svc.ServiceContext) *QuitGro
 
 func (l *QuitGroupLogic) QuitGroup(req *types.QuitGroupRequest) (resp *types.QuitGroupResponse, err error) {
 	// todo: add your logic here and delete this line
-	err = l.svcCtx.GmemberModel.QuietGroup(l.ctx, req.Gid, req.Uid)
+	err = l.svcCtx.GmemberModel.QuietGroup(l.ctx, req.Uid, req.Gid)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
