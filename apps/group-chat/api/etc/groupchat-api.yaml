@@ -16,7 +16,7 @@ Log:
   Level: debug
 
 Mysql:
-  DataSource: root:wpzyyds@tcp(192.168.0.103:3306)/zchat?charset=utf8mb4
+  DataSource: root:wpzyyds@tcp(192.168.0.110:3306)/zchat?charset=utf8mb4
 
 Client:
   MessageBuf: 128
@@ -31,7 +31,7 @@ Client:
 GroupMsgKqConf:
   Name: groupmsg-mq #定义服务的名称，会出现在 log 和 tracer 中
   Brokers:
-    - 192.168.0.103:9092
+    - 192.168.0.110:9092
   Group: GroupMsg-group
   Topic: GroupMsg
   Offset: last
@@ -40,7 +40,7 @@ GroupMsgKqConf:
 NewUserKqConf:
   Name: newuser-mq
   Brokers:
-    - 192.168.0.103:9092
+    - 192.168.0.110:9092
   Group: newuser-groupchat-group
   Topic: newuser
   Offset: last
@@ -51,11 +51,11 @@ NewUserKqConf:
 UserRpcService:
   Etcd:
     Hosts:
-      - 192.168.0.103:2379
+      - 192.168.0.110:2379
     Key: user.rpc
 
 
 Redis:
-  Host: 192.168.0.103:6379
+  Host: 192.168.0.110:6379
   Type: node
   Pass:

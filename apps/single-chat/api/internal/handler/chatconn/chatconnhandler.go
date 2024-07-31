@@ -30,7 +30,6 @@ type Node struct {
 // ChatConnHandler 处理WebSocket连接请求
 func ChatConnHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-
 		uidJson := r.Context().Value("uid").(json.Number) // 从jwt里面提取uid
 		uid, err := uidJson.Int64()
 		if err != nil {
